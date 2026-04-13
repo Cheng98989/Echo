@@ -1,0 +1,1 @@
+Programma di gestione e riproduzione di track audio realizzato con **C# App Windows Form (.NET 4.8.0)**
