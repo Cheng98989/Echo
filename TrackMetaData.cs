@@ -134,5 +134,27 @@ namespace SoundDeck
                 .FromSeconds(seconds)
                 .ToString("mm\\:ss");
         }
+
+
+        public static void DeleteAudioTrackFromArray(int toDeleteIndex,AudioTrack[] array, ref int arrayCount, bool keepOrder = true)
+        {
+            if(array == null)
+            {
+                throw new NullReferenceException($"{nameof(array)} is null or empty");
+            }
+            if(keepOrder)
+            {
+                arrayCount--;
+                array[toDeleteIndex] = array[arrayCount];
+            }
+            else
+            {
+                while(toDeleteIndex < arrayCount - 1)
+                {
+                    array[toDeleteIndex] = array[toDeleteIndex + 1];
+                    toDeleteIndex++;
+                }
+            }
+        }
     }
 }

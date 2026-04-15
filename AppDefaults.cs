@@ -1,3 +1,6 @@
+using System;
+using TagLib.Matroska;
+
 namespace SoundDeck
 {
     /// <summary>

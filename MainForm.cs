@@ -229,5 +229,52 @@ namespace SoundDeck
                 return;
             playlist[currentPlayingAudio].LastVolume = TrackManager.StopTrack(ref audioFileReader,ref waveOutDevice);
         }
+
+        //ContextMenuStrip Tabella playlist
+        private void tspDeleteAudioSelected_Click(object sender, EventArgs e)
+        {
+            if(plvPlaylist.FocusedItem == null)
+            {
+                PoisonMessageBox.Show(this,"Nessun Audio Selezionato");
+                return;
+            }
+            int selectedIndex = plvPlaylist.FocusedItem.Index;
+
+            TrackMetaData.DeleteAudioTrackFromArray(selectedIndex, playlist, ref playlistCount, true);
+
+            UIHelper.PopulatePlaylistListView(playlist, playlistCount, plvPlaylist);
+
+            plbSelectedAudioTitle.Text = "Non disponibile";
+            plbSelectedAudioArtist.Text = "Non disponibile";
+            picSelectedAudioAlbumArt.Image = picSelectedAudioAlbumArt.InitialImage;
+        }
+
+        private void tspDeleteAudioAll_Click(object sender, EventArgs e)
+        {
+            DialogResult result = PoisonMessageBox.Show(
+                this,
+                $"Sei sicuro di voler eliminare tutta la playlist?\n" +
+                $"Tale azione non è reversibile.",
+                "Svuota Playlist",
+                MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Warning
+                );
+
+            if (result != DialogResult.Yes)
+                return;
+
+            ConfirmForm uc = new ConfirmForm("CONFERMO");
+            uc.ShowDialog();
+            if (uc.Result != true)
+                return;
+
+            playlistCount = 0;
+
+            UIHelper.PopulatePlaylistListView(playlist, playlistCount, plvPlaylist);
+
+            plbSelectedAudioTitle.Text = "Non disponibile";
+            plbSelectedAudioArtist.Text = "Non disponibile";
+            picSelectedAudioAlbumArt.Image = picSelectedAudioAlbumArt.InitialImage;
+        }
     }
 }
