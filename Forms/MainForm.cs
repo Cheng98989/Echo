@@ -188,24 +188,28 @@ namespace SoundDeck
 
         private void ptlSelectedAudioPlay_Click(object sender, EventArgs e)
         {
+            //Controllo
             if (playlistCount <= 0)
             {
                 MessageBox.Show("Playlist Vuota");
                 return;
             }
 
+            //Ricerca audio tramite index della poison list view o in base a una ricerca su titolo o autore
             int audioIndex = default;
             if (plvPlaylist.FocusedItem == null)
                 audioIndex = TrackMetaData.FindTrackIndexByTitleAndArtist(plbSelectedAudioTitle.Text, plbSelectedAudioArtist.Text, playlist, playlistCount);
             else
                 audioIndex = plvPlaylist.FocusedItem.Index;
-
+            
+            //Fallback in caso di audio non trovato
             if (audioIndex == -1)
             {
                 MessageBox.Show("Audio non trovato");
                 return;
             }
 
+            //Se sto un'altro audio e' in riproduzione mi salvo il suo volume (else) altrimenti nulla
             if (currentPlayingAudio == -1)
                 TrackManager.StartTrack(playlist[audioIndex], ref audioFileReader,ref waveOutDevice);
             else
@@ -289,7 +293,8 @@ namespace SoundDeck
             }
             int selectedIndex = plvPlaylist.FocusedItem.Index;
 
-            ModifyForm mf = new ModifyForm();
+            ModifyForm mf = new ModifyForm(playlist[selectedIndex]);
+            mf.ShowDialog();
         }
     }
 }

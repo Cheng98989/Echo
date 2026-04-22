@@ -15,7 +15,9 @@ namespace SoundDeck
 {
     public partial class ConfirmForm : PoisonForm
     {
-        public bool Result;
+        //Get e set sono i metodi di accesso di una proprieta'
+        //get mette in sola lettura la proprieta Result e private set la rende modificale solo dall'interno della classe.
+        public bool Result { get; private set; }
         public ConfirmForm(string ConfirmMessage)
         {
             InitializeComponent();

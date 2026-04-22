@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TagLib.Matroska;
 
 namespace SoundDeck
 {
@@ -132,7 +133,6 @@ namespace SoundDeck
         {
             return (float)MathHelper.LinearMapClamp(volume, 100, 0, 0, 1);
         }
-
     }
     
     
