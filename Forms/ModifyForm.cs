@@ -40,7 +40,6 @@ namespace SoundDeck
             ptxAlbum.Text = audioTrack.Album;
             picAudioAlbumArt.Image = audioTrack.AlbumArt;
             plbDurata.Text = TrackMetaData.FormatTrackTime((int)audioTrack.Duration.TotalSeconds);
-            psbAudioVolume.Value = (int)MathHelper.LinearMapClamp(audioTrack.LastVolume,AppDefaults.MinVolume,AppDefaults.MaxVolume,psbAudioVolume.Minimum,psbAudioVolume.Maximum);
             ptxVolumeMultiplier.Text = new AudioFileReader(audioTrack.FilePath).Volume.ToString();
         }
     }

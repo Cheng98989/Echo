@@ -69,7 +69,7 @@ namespace SoundDeck
         //Global
         private TrackMetaData.AudioTrack[] playlist = new TrackMetaData.AudioTrack[AppDefaults.MaxLoadedTracks];
         private int playlistCount = default;
-        private int currentPlayingAudio = -1;
+        //private int currentPlayingAudio = -1;
         
         private WaveOutEvent waveOutDevice;
         private AudioFileReader audioFileReader;
@@ -208,18 +208,18 @@ namespace SoundDeck
                 MessageBox.Show("Audio non trovato");
                 return;
             }
-
+            //Elimino la variabile int current playing audio perche' mi serviva per salvare la canzone che stava girando e salvare il suo last volume (che sto togliendo)
             //Se sto un'altro audio e' in riproduzione mi salvo il suo volume (else) altrimenti nulla
-            if (currentPlayingAudio == -1)
-                TrackManager.StartTrack(playlist[audioIndex], ref audioFileReader,ref waveOutDevice);
-            else
-                playlist[currentPlayingAudio].LastVolume = TrackManager.StartTrack(playlist[audioIndex], ref audioFileReader, ref waveOutDevice);
+            //if (currentPlayingAudio == -1)
+            //    TrackManager.StartTrack(playlist[audioIndex], ref audioFileReader,ref waveOutDevice);
+            //else
+            //    playlist[currentPlayingAudio].VolumeMultiplier = TrackManager.StartTrack(playlist[audioIndex], ref audioFileReader, ref waveOutDevice);
 
-            psbSelectedAudioVolume.Value = UIHelper.waveOutEventVolumeTopsbValue(playlist[audioIndex].LastVolume);
+            //psbSelectedAudioVolume.Value = UIHelper.waveOutEventVolumeTopsbValue(playlist[audioIndex].VolumeMultiplier);
 
+            TrackManager.StartTrack(playlist[audioIndex], ref audioFileReader, ref waveOutDevice);
 
-
-            currentPlayingAudio = audioIndex;
+            //currentPlayingAudio = audioIndex;
         }
 
         private void ptlSelectedAudioPause_Click(object sender, EventArgs e)
@@ -229,9 +229,11 @@ namespace SoundDeck
 
         private void ptlSelectedAudioStop_Click(object sender, EventArgs e)
         {
-            if (currentPlayingAudio == -1)
-                return;
-            playlist[currentPlayingAudio].LastVolume = TrackManager.StopTrack(ref audioFileReader,ref waveOutDevice);
+            //Eliminato perche' last volume lo sto togliendo
+            //if (currentPlayingAudio == -1)
+            //    return;
+            //playlist[currentPlayingAudio].VolumeMultiplier = TrackManager.StopTrack(ref audioFileReader,ref waveOutDevice);
+            TrackManager.StopTrack(ref audioFileReader, ref waveOutDevice);
         }
 
         //ContextMenuStrip Tabella playlist

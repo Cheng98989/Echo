@@ -10,25 +10,27 @@ namespace SoundDeck
 {
     public static class TrackManager
     {
-        public static float StartTrack(TrackMetaData.AudioTrack audio,ref AudioFileReader audioFileReader, ref WaveOutEvent waveOutEvent)
+        public static void StartTrack(TrackMetaData.AudioTrack audio,ref AudioFileReader audioFileReader, ref WaveOutEvent waveOutEvent)
         {
-            float previusAudioVolume = AppDefaults.DefaultTrackVolume;
+            //Sto togliendo lastvolume e derivati
+            //float previusAudioVolume = AppDefaults.DefaultVolumeMultiplier;
             if (waveOutEvent != null && waveOutEvent.PlaybackState == PlaybackState.Playing)
             {
-                previusAudioVolume = StopTrack(ref audioFileReader, ref waveOutEvent);
+                StopTrack(ref audioFileReader, ref waveOutEvent);
             }
 
             if (waveOutEvent != null && waveOutEvent.PlaybackState == PlaybackState.Paused)
             {
                 waveOutEvent.Play();
-                return -1;
-            }
+                //return -1;
+            
 
             try
             {
                 audioFileReader = new AudioFileReader(audio.FilePath);
                 waveOutEvent = new WaveOutEvent();
-                waveOutEvent.Volume = audio.LastVolume;
+                //Rimosso perche si ha cambiato da last volume a volume multiplier
+                //waveOutEvent.Volume = audio.VolumeMultiplier;
                 waveOutEvent.Init(audioFileReader);
                 waveOutEvent.Play();
             }
@@ -36,16 +38,16 @@ namespace SoundDeck
             {
                 MessageBox.Show("Errore durante la riproduzione: " + ex.Message);
             }
-            return previusAudioVolume;
+            //return previusAudioVolume;
             
         }
 
-        public static float StopTrack(ref AudioFileReader audioFileReader,ref WaveOutEvent waveOutEvent)
+        public static void StopTrack(ref AudioFileReader audioFileReader,ref WaveOutEvent waveOutEvent)
         {
-            float lastVolume = AppDefaults.DefaultTrackVolume;
+            //Tolto last volume
+            //float lastVolume = AppDefaults.DefaultVolumeMultiplier;
             if (waveOutEvent != null)
             {
-                lastVolume = waveOutEvent.Volume;
                 waveOutEvent.Stop();
                 waveOutEvent.Dispose();
                 waveOutEvent = null;
@@ -56,7 +58,6 @@ namespace SoundDeck
                 audioFileReader.Dispose();
                 audioFileReader = null;
             }
-            return lastVolume;
         }
 
         public static void PauseTrack(WaveOutEvent waveOutEvent)

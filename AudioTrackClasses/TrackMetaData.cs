@@ -24,7 +24,7 @@ namespace SoundDeck
 
             //Informazioni di servizio
             public string FilePath;
-            public float LastVolume;
+            public float VolumeMultiplier;
             public TimeSpan Duration;
         }
 
@@ -44,10 +44,10 @@ namespace SoundDeck
         /// </list>
         /// </remarks>
         /// <param name="filePath">Percorso del file audio da analizzare.</param>
-        /// <param name="defaultVolume">Volume iniziale assegnato alla traccia caricata (default: <see cref="AppDefaults.DefaultTrackVolume"/>).</param>
+        /// <param name="defaultVolume">Volume iniziale assegnato alla traccia caricata (default: <see cref="AppDefaults.DefaultVolumeMultiplier"/>).</param>
         /// <returns>Un <see cref="AudioTrack"/> popolato con le informazioni lette dal file.</returns>
         /// <exception cref="FileNotFoundException">Generata quando il file non esiste.</exception>
-        public static AudioTrack FromFile(string filePath, float defaultVolume = AppDefaults.DefaultTrackVolume)
+        public static AudioTrack FromFile(string filePath, float defaultVolume = AppDefaults.DefaultVolumeMultiplier)
         {
             if (!System.IO.File.Exists(filePath))
                 throw new System.IO.FileNotFoundException();
@@ -97,7 +97,7 @@ namespace SoundDeck
                 newTrack.Duration = audioFileReader.TotalTime;
                 audioFileReader = null;
 
-                newTrack.LastVolume = safeDefaultVolume;
+                newTrack.VolumeMultiplier = safeDefaultVolume;
             }
             catch (Exception ex)
             {
@@ -107,7 +107,7 @@ namespace SoundDeck
                 newTrack.Album = "Sconosciuto";
                 newTrack.Duration = TimeSpan.Zero;
                 newTrack.AlbumArt = null;
-                newTrack.LastVolume = safeDefaultVolume;
+                newTrack.VolumeMultiplier = safeDefaultVolume;
             }
 
             return newTrack;
