@@ -24,6 +24,9 @@ namespace SoundDeck
             try
             {
                 audioFileReader = new AudioFileReader(audio.FilePath);
+                //Volume Brano
+                audioFileReader.Volume = audio.VolumeMultiplier;
+                //Volume del programma
                 waveOutEvent = new WaveOutEvent();
                 //Rimosso perche si ha cambiato da last volume a volume multiplier
                 //waveOutEvent.Volume = audio.VolumeMultiplier;

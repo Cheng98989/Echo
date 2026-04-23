@@ -67,12 +67,12 @@ namespace SoundDeck
                 //Artist
                 newTrack.Artist = !string.IsNullOrEmpty(fileTag.Tag.FirstPerformer)
                     ? fileTag.Tag.FirstPerformer.Trim()
-                    : "Autore sconosciuto";
+                    : AppDefaults.AudioTrackArtistNotAvailable;
 
                 //Album
                 newTrack.Album = !string.IsNullOrEmpty(fileTag.Tag.Album)
                     ? fileTag.Tag.Album.Trim()
-                    : "Album sconosciuto";
+                    : AppDefaults.AudioTrackAlbumNotAvailable;
 
                 // Cover
                 if (fileTag.Tag.Pictures.Length >= 1)
@@ -101,10 +101,10 @@ namespace SoundDeck
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Errore: {ex.Message}");
+                MessageBox.Show($"Error: {ex.Message}");
                 newTrack.Title = Path.GetFileNameWithoutExtension(filePath);
-                newTrack.Artist = "Sconosciuto";
-                newTrack.Album = "Sconosciuto";
+                newTrack.Artist = AppDefaults.AudioTrackError;
+                newTrack.Album = AppDefaults.AudioTrackError;
                 newTrack.Duration = TimeSpan.Zero;
                 newTrack.AlbumArt = null;
                 newTrack.VolumeMultiplier = safeDefaultVolume;

@@ -133,6 +133,19 @@ namespace SoundDeck
         {
             return (float)MathHelper.LinearMapClamp(volume, 100, 0, 0, 1);
         }
+
+        public static void ShowImageInPictureBox(PictureBox pic, Image image)
+        {
+            if (pic == null)
+                throw new ArgumentNullException(nameof(pic));
+
+            if (image == null)
+            {
+                pic.Image = AppDefaults.NullImage;
+                return;
+            }
+            pic.Image = image;
+        }
     }
     
     

@@ -318,6 +318,7 @@ namespace SoundDeck
             this.ptxAudioFilePath.MaxLength = 32767;
             this.ptxAudioFilePath.Name = "ptxAudioFilePath";
             this.ptxAudioFilePath.PasswordChar = '\0';
+            this.ptxAudioFilePath.ReadOnly = true;
             this.ptxAudioFilePath.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.ptxAudioFilePath.SelectedText = "";
             this.ptxAudioFilePath.SelectionLength = 0;

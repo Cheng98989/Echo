@@ -171,7 +171,7 @@ namespace SoundDeck
             int audioIndex = plvPlaylist.FocusedItem.Index;
             plbSelectedAudioTitle.Text = playlist[audioIndex].Title;
             plbSelectedAudioArtist.Text = playlist[audioIndex].Artist;
-            picSelectedAudioAlbumArt.Image = playlist[audioIndex].AlbumArt;
+            UIHelper.ShowImageInPictureBox(picSelectedAudioAlbumArt, playlist[audioIndex].AlbumArt);
         }
 
         private void ptbSelectedAudioPosition_MouseLeave(object sender, EventArgs e)
@@ -290,7 +290,9 @@ namespace SoundDeck
 
             ModifyForm mf = new ModifyForm(playlist[selectedIndex]);
             mf.ShowDialog();
-            playlist[selectedIndex] = mf.audioTrack;
+
+            if(mf.DialogResult == DialogResult.OK)
+                playlist[selectedIndex] = mf.audioTrack;
         }
     }
 }

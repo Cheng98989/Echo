@@ -40,7 +40,7 @@ namespace SoundDeck
         /// <param name="min">Il limite minimo dell'intervallo.</param>
         /// <param name="max">Il limite massimo dell'intervallo.</param>
         /// <returns>Il valore <paramref name="value"/> se è compreso tra <paramref name="min"/> e <paramref name="max"/>, altrimenti il limite più vicino.</returns>
-        private static double Clamp(double value, double min, double max)
+        public static double Clamp(double value, double min, double max)
         {
             if (value < min) return min;
             if (value > max) return max;
