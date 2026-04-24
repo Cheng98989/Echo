@@ -3,6 +3,7 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -57,48 +58,95 @@ namespace Echo
 
             AudioTrack newTrack;
             newTrack.FilePath = filePath;
+
             try
             {
-                TagLib.File fileTag = TagLib.File.Create(filePath);
-
-                //Title
-                newTrack.Title = !string.IsNullOrEmpty(fileTag.Tag.Title)
-                    ? fileTag.Tag.Title.Trim()
-                    : Path.GetFileNameWithoutExtension(filePath);
-                //Artist
-                newTrack.Artist = !string.IsNullOrEmpty(fileTag.Tag.FirstPerformer)
-                    ? fileTag.Tag.FirstPerformer.Trim()
-                    : AppDefaults.AudioTrackArtistNotAvailable;
-
-                //Album
-                newTrack.Album = !string.IsNullOrEmpty(fileTag.Tag.Album)
-                    ? fileTag.Tag.Album.Trim()
-                    : AppDefaults.AudioTrackAlbumNotAvailable;
-
-                // Cover
-                if (fileTag.Tag.Pictures.Length >= 1)
+                // Nota: `TagLib.File` implementa `IDisposable`.
+                // In .NET Framework conviene sempre racchiuderlo in `using` per rilasciare handle/file lock.
+                using (TagLib.File fileTag = TagLib.File.Create(filePath))
                 {
-                    //bin contains the raw bytes stream of the picture
-                    byte[] bin = fileTag.Tag.Pictures[0].Data.Data;
+                    // ----------------------------
+                    // Lettura metadati testuali
+                    // ----------------------------
+                    newTrack.Title = !string.IsNullOrEmpty(fileTag.Tag.Title)
+                        ? fileTag.Tag.Title.Trim()
+                        : Path.GetFileNameWithoutExtension(filePath);
 
-                    //ms contains the bytes stream
-                    using (MemoryStream ms = new MemoryStream(bin))
+                    newTrack.Artist = !string.IsNullOrEmpty(fileTag.Tag.FirstPerformer)
+                        ? fileTag.Tag.FirstPerformer.Trim()
+                        : AppDefaults.AudioTrackArtistNotAvailable;
+
+                    newTrack.Album = !string.IsNullOrEmpty(fileTag.Tag.Album)
+                        ? fileTag.Tag.Album.Trim()
+                        : AppDefaults.AudioTrackAlbumNotAvailable;
+
+                    
+
+                    // ----------------------------
+                    // Root cause reale del bug GDI+
+                    // ----------------------------
+                    // Errore originale:
+                    //   System.Runtime.InteropServices.ExternalException
+                    //   "Errore generico in GDI+."
+                    // durante `albumArt.Save(ms, format)`.
+                    //
+                    // Causa profonda:
+                    // - Se si usa `Image.FromStream(ms)` e poi si chiude `ms`,
+                    //   l'oggetto `Image` può rimanere internamente legato allo stream sorgente.
+                    // - In un momento successivo (qui durante salvataggio tag), GDI+ deve riaccedere ai dati
+                    //   originali dell'immagine per ricodificarla e fallisce con errore generico.
+                    //
+                    // Soluzione robusta:
+                    // - creare un'immagine "indipendente" dallo stream facendo una copia fisica (`new Bitmap(img)`).
+                    // - in questo modo, quando il `MemoryStream` viene chiuso, `AlbumArt` resta perfettamente valida.
+                    if (fileTag.Tag.Pictures != null && fileTag.Tag.Pictures.Length >= 1)
                     {
-                        //Draw the image from the MemoryStream and put it into newTrack.AlbumArt
-                        newTrack.AlbumArt = Image.FromStream(ms);
+                        byte[] bin = fileTag.Tag.Pictures[0].Data.Data;
+
+                        using (var ms = new MemoryStream(bin))
+                        using (var img = Image.FromStream(ms, true, true))
+                        {
+                            // Copia disaccoppiata dallo stream: evita il classico ExternalException GDI+ in Save().
+                            newTrack.AlbumArt = new Bitmap(img);
+                        }
                     }
+                    else
+                    {
+                        newTrack.AlbumArt = null;
+                    }
+
+                    // VolumeMultiplier custom tag (TXXX: ECHO_VOLUME_MULTIPLIER)
+                    // Se assente/non valido resta il default sicuro.
+                    float volumeFromTag = safeDefaultVolume;
+
+                    TagLib.Id3v2.Tag id3v2 = (TagLib.Id3v2.Tag)fileTag.GetTag(TagLib.TagTypes.Id3v2, false);
+                    if (id3v2 != null)
+                    {
+                        var frame = TagLib.Id3v2.UserTextInformationFrame.Get(
+                            id3v2,
+                            "ECHO_VOLUME_MULTIPLIER",
+                            false);
+
+                        if (frame != null && frame.Text != null && frame.Text.Length > 0)
+                        {
+                            string raw = frame.Text[0].Trim();
+
+                            float parsed;
+
+                            if (float.TryParse(raw, out parsed))
+                                volumeFromTag = (float)MathHelper.Clamp(parsed, 0f, 1f);
+                        }
+                    }
+
+                    newTrack.VolumeMultiplier = volumeFromTag;
                 }
-                else
+
+                // Nota: anche `AudioFileReader` è `IDisposable`.
+                // Evita leak di handle file e comportamenti intermittenti.
+                using (AudioFileReader audioFileReader = new AudioFileReader(filePath))
                 {
-                    newTrack.AlbumArt = null;
+                    newTrack.Duration = audioFileReader.TotalTime;
                 }
-
-                //Durata
-                AudioFileReader audioFileReader = new AudioFileReader(filePath);
-                newTrack.Duration = audioFileReader.TotalTime;
-                audioFileReader = null;
-
-                newTrack.VolumeMultiplier = safeDefaultVolume;
             }
             catch (Exception ex)
             {
@@ -116,39 +164,51 @@ namespace Echo
 
         public static bool OverwriteMP3MetaTags(string mp3Path, AudioTrack audioTrack)
         {
-            if(!System.IO.File.Exists(mp3Path) || Path.GetExtension(mp3Path) != ".mp3")
+            if (!System.IO.File.Exists(mp3Path) || Path.GetExtension(mp3Path) != ".mp3")
                 return false;
+
             try
             {
-                TagLib.File mp3 = TagLib.File.Create(mp3Path);
-                mp3.Tag.Title = audioTrack.Title;
-                mp3.Tag.Performers = new string[] { audioTrack.Artist };
-                mp3.Tag.Album = audioTrack.Album;
-                mp3.Tag.Pictures = ImageHelper.BuildTagPicturesFromImage(audioTrack.AlbumArt);
-                //Volume Multiplier
-                // 1) Recupera il tag ID3v2 del file MP3; se non esiste lo crea (secondo parametro = true).
-                var volumeMultiplierTag = (TagLib.Id3v2.Tag)mp3.GetTag(TagLib.TagTypes.Id3v2, true);
-
-                // 2) Cerca (o crea) un frame testuale personalizzato (TXXX) con chiave "ECHO_VOLUME_MULTIPLIER".
-                //ID3v2 e il contenitore di metadati dei mp3 e frame e'un campo di ID3v2 insiema ad autore...
-                var frame = TagLib.Id3v2.UserTextInformationFrame.Get(
-                    volumeMultiplierTag,
-                    "ECHO_VOLUME_MULTIPLIER",
-                    true);
-    
-                // 3) Scrive il valore del volume nel frame custom come stringa in formato invariabile (usa '.' come separatore decimale).
-                frame.Text = new string[]
+                // Anche qui usare `using` è consigliato:
+                // garantisce flush e rilascio corretto risorse native/file.
+                using (TagLib.File mp3 = TagLib.File.Create(mp3Path))
                 {
-                    audioTrack.VolumeMultiplier.ToString(System.Globalization.CultureInfo.InvariantCulture)
-                };
+                    mp3.Tag.Title = audioTrack.Title;
+                    mp3.Tag.Performers = new string[] { audioTrack.Artist };
+                    mp3.Tag.Album = audioTrack.Album;
 
-                // 4) Salva fisicamente su disco tutte le modifiche dei metadati.
-                mp3.Save();
+                    // Questo punto prima falliva quando `audioTrack.AlbumArt` proveniva da uno stream già chiuso.
+                    // Dopo la correzione in `FromFile`, l'immagine è autonoma e serializzabile.
+                    mp3.Tag.Pictures = ImageHelper.BuildTagPicturesFromImage(audioTrack.AlbumArt);
+
+                    var customTags = (TagLib.Id3v2.Tag)mp3.GetTag(TagLib.TagTypes.Id3v2, true);
+
+                    var frame = TagLib.Id3v2.UserTextInformationFrame.Get(
+                        customTags,
+                        "ECHO_VOLUME_MULTIPLIER",
+                        true);
+
+                    frame.Text = new string[]
+                    {
+                        audioTrack.VolumeMultiplier.ToString()
+                    };
+
+                    mp3.Save();
+                }
+
                 return true;
             }
-            catch(Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                // IMPORTANTISSIMO:
+                // NON fare `throw new Exception(ex.Message);`
+                // perché:
+                // 1) perdi tipo eccezione originale (`ExternalException`, ecc.),
+                // 2) perdi stack trace originale,
+                // 3) rendi il debugging molto più difficile.
+                //
+                // `throw;` preserva integralmente il contesto reale del guasto.
+                throw;
             }
         }
 
@@ -195,5 +255,7 @@ namespace Echo
                 }
             }
         }
+
+        
     }
 }

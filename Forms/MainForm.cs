@@ -364,8 +364,60 @@ namespace Echo
                             $"Errore {ex.Message}"
                             );
             }
+        }
 
-            
+        private void caricaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Controllo
+            if (playlistCount > 0)
+            {
+                DialogResult res = PoisonMessageBox.Show(
+                    this,
+                    "Sei sicuro di voler caricare una nuova playlist?",
+                    "Confirmation",
+                    MessageBoxButtons.YesNoCancel
+                    );
+                if (res != DialogResult.Yes)
+                    return;
+            }
+
+            //Select Directory
+            FolderBrowserDialog openFileManager = new FolderBrowserDialog();
+            string directoryPath;
+            if (openFileManager.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            directoryPath = openFileManager.SelectedPath;
+            playlistCount = 0;
+            string[] mp3Paths = Directory.GetFiles(directoryPath);
+            for (int i = 0; i < mp3Paths.Length && i < AppDefaults.MaxLoadedTracks; i++)
+            {
+                //Repetition verification
+                if(System.IO.Path.GetExtension(mp3Paths[i]) != ".mp3")
+                    continue;
+                TrackMetaData.AudioTrack newTrack = TrackMetaData.FromFile(mp3Paths[i]);
+                int findResult = TrackMetaData.FindTrackIndexByTitleAndArtist(newTrack.Title, newTrack.Artist, playlist, playlistCount);
+                if (findResult != -1)
+                {
+                    //Forse per evitare problemi durante il salvataggio di file meglio togliere la possibilita di avere stesso nome
+                    DialogResult result = PoisonMessageBox.Show(
+                    this,
+                    $"È già presente nella playlist un brano con lo stesso titolo \"{newTrack.Title}\" " +
+                    "Vuoi aggiungerlo comunque?",
+                    "Brano duplicato",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Warning
+                    );
+
+                    if (result != DialogResult.Yes)
+                        return;
+                }
+
+                playlist[playlistCount] = newTrack;
+                playlistCount++;
+            }
+            UIHelper.PopulatePlaylistListView(playlist, playlistCount, plvPlaylist);
         }
     }
 }
