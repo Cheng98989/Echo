@@ -8,9 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TagLib;
 using TagLib.WavPack;
 
-namespace SoundDeck
+namespace Echo
 {
     public static class TrackMetaData
     {
@@ -52,13 +53,13 @@ namespace SoundDeck
             if (!System.IO.File.Exists(filePath))
                 throw new System.IO.FileNotFoundException();
 
-            float safeDefaultVolume = Math.Max(AppDefaults.MinVolume, Math.Min(AppDefaults.MaxVolume, defaultVolume));
+            float safeDefaultVolume = Math.Max(AppDefaults.MinDeviceVolume, Math.Min(AppDefaults.MaxDeviceVolume, defaultVolume));
 
             AudioTrack newTrack;
             newTrack.FilePath = filePath;
             try
             {
-                var fileTag = TagLib.File.Create(filePath);
+                TagLib.File fileTag = TagLib.File.Create(filePath);
 
                 //Title
                 newTrack.Title = !string.IsNullOrEmpty(fileTag.Tag.Title)
@@ -111,6 +112,44 @@ namespace SoundDeck
             }
 
             return newTrack;
+        }
+
+        public static bool OverwriteMP3MetaTags(string mp3Path, AudioTrack audioTrack)
+        {
+            if(!System.IO.File.Exists(mp3Path) || Path.GetExtension(mp3Path) != ".mp3")
+                return false;
+            try
+            {
+                TagLib.File mp3 = TagLib.File.Create(mp3Path);
+                mp3.Tag.Title = audioTrack.Title;
+                mp3.Tag.Performers = new string[] { audioTrack.Artist };
+                mp3.Tag.Album = audioTrack.Album;
+                mp3.Tag.Pictures = ImageHelper.BuildTagPicturesFromImage(audioTrack.AlbumArt);
+                //Volume Multiplier
+                // 1) Recupera il tag ID3v2 del file MP3; se non esiste lo crea (secondo parametro = true).
+                var volumeMultiplierTag = (TagLib.Id3v2.Tag)mp3.GetTag(TagLib.TagTypes.Id3v2, true);
+
+                // 2) Cerca (o crea) un frame testuale personalizzato (TXXX) con chiave "ECHO_VOLUME_MULTIPLIER".
+                //ID3v2 e il contenitore di metadati dei mp3 e frame e'un campo di ID3v2 insiema ad autore...
+                var frame = TagLib.Id3v2.UserTextInformationFrame.Get(
+                    volumeMultiplierTag,
+                    "ECHO_VOLUME_MULTIPLIER",
+                    true);
+    
+                // 3) Scrive il valore del volume nel frame custom come stringa in formato invariabile (usa '.' come separatore decimale).
+                frame.Text = new string[]
+                {
+                    audioTrack.VolumeMultiplier.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                };
+
+                // 4) Salva fisicamente su disco tutte le modifiche dei metadati.
+                mp3.Save();
+                return true;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public static int FindTrackIndexByTitleAndArtist(string title,  string artist, AudioTrack[] audioTrackArray, int audioTrackArrayCount)

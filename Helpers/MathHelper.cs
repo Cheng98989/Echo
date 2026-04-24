@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SoundDeck
+namespace Echo
 {
     public static class MathHelper
     {

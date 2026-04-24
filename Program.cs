@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ReaLTaiizor.Forms;
 
-namespace SoundDeck
+namespace Echo
 {
     internal static class Program
     {

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace SoundDeck
+namespace Echo
 {
     public static class StringHelper
     {
@@ -18,6 +20,15 @@ namespace SoundDeck
                 output[i] = characters[rdm.Next(0, characters.Length)];
             }
             return new string(output);
+        }
+
+        public static bool CanBeADirectoryOrFileName(string name)
+        {
+            if (name.Length > AppDefaults.DirectoryOrFileNameMaxLenght)
+                return false;
+            if (name.IndexOfAny(AppDefaults.NotAllowedCharsInDirectoryOrFileName) >= 0)
+                return false;
+            return true;
         }
     }
 }

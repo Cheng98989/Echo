@@ -1,16 +1,37 @@
 using System;
 using System.Drawing;
+using System.IO;
 using TagLib.Matroska;
 
-namespace SoundDeck
+namespace Echo
 {
     /// <summary>
     /// Parametri di default condivisi dall'applicazione.
     /// </summary>
     public static class AppDefaults
     {
-        public const int MinVolume = 0;
-        public const int MaxVolume = 1;
+        //AudioTrack save path
+        public static bool DeleteOriginalAudioTrack = false;
+        public static string AudioTrackSavePath = Path.Combine(".","playlist");
+        public const int DirectoryOrFileNameMaxLenght = 30;
+        public static char[] NotAllowedCharsInDirectoryOrFileName = new char[]
+        {
+            '/',
+            '\\',
+            '<',
+            '>',
+            ':',
+            '"',
+            '|',
+            '?',
+            '*',
+            '\0'
+        };
+
+        public static char SubstituteToSpaceInDirectoryOrFileName = '-';
+
+        public const int MinDeviceVolume = 0;
+        public const int MaxDeviceVolume = 1;
         public const float DefaultVolumeMultiplier = 1f;
         public const int MaxLoadedTracks = 500;
         public const int ConfirmationStringLeght = 5;
@@ -24,7 +45,7 @@ namespace SoundDeck
 
         //AlbumArt
         public static string DefaultAudioTrackAlbumArtMessage = ".";
-        public static Image NullImage = SoundDeck.Properties.Resources.AlbumArtNotAvailable;
+        public static Image NullImage = Echo.Properties.Resources.AlbumArtNotAvailable;
 
     }
 }

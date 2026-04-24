@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace SoundDeck
+namespace Echo
 {
     partial class MainForm
     {
@@ -59,14 +59,16 @@ namespace SoundDeck
             this.tspSelectedAudio = new System.Windows.Forms.ToolStripMenuItem();
             this.tspSelectedAudioDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.tspSelectedAudioModify = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.pbtDeleteDeleteAllAudio = new ReaLTaiizor.Controls.PoisonButton();
-            this.pbtDeleteAudio = new ReaLTaiizor.Controls.PoisonButton();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
+            this.tsiPlaylistSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.salvaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ptxPlaylistName = new ReaLTaiizor.Controls.PoisonTextBox();
             this.poisonTabControl1.SuspendLayout();
             this.poisonTabPage1.SuspendLayout();
             this.poisonPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSelectedAudioAlbumArt)).BeginInit();
             this.pcmDeleteAudio.SuspendLayout();
+            this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // poisonTabControl1
@@ -154,7 +156,7 @@ namespace SoundDeck
             this.ptlSelectedAudioStop.Name = "ptlSelectedAudioStop";
             this.ptlSelectedAudioStop.Size = new System.Drawing.Size(40, 40);
             this.ptlSelectedAudioStop.TabIndex = 14;
-            this.ptlSelectedAudioStop.TileImage = global::SoundDeck.Properties.Resources.StopAudio;
+            this.ptlSelectedAudioStop.TileImage = global::Echo.Properties.Resources.StopAudio;
             this.ptlSelectedAudioStop.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ptlSelectedAudioStop.UseCustomBackColor = true;
             this.ptlSelectedAudioStop.UseSelectable = true;
@@ -181,7 +183,7 @@ namespace SoundDeck
             this.ptlSelectedAudioPause.Name = "ptlSelectedAudioPause";
             this.ptlSelectedAudioPause.Size = new System.Drawing.Size(40, 40);
             this.ptlSelectedAudioPause.TabIndex = 13;
-            this.ptlSelectedAudioPause.TileImage = global::SoundDeck.Properties.Resources.PauseAudio;
+            this.ptlSelectedAudioPause.TileImage = global::Echo.Properties.Resources.PauseAudio;
             this.ptlSelectedAudioPause.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ptlSelectedAudioPause.UseCustomBackColor = true;
             this.ptlSelectedAudioPause.UseSelectable = true;
@@ -210,7 +212,7 @@ namespace SoundDeck
             this.ptlSelectedAudioPlay.Name = "ptlSelectedAudioPlay";
             this.ptlSelectedAudioPlay.Size = new System.Drawing.Size(40, 40);
             this.ptlSelectedAudioPlay.TabIndex = 12;
-            this.ptlSelectedAudioPlay.TileImage = global::SoundDeck.Properties.Resources.PlayAudio;
+            this.ptlSelectedAudioPlay.TileImage = global::Echo.Properties.Resources.PlayAudio;
             this.ptlSelectedAudioPlay.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ptlSelectedAudioPlay.UseCustomBackColor = true;
             this.ptlSelectedAudioPlay.UseSelectable = true;
@@ -220,7 +222,7 @@ namespace SoundDeck
             // picSelectedAudioAlbumArt
             // 
             this.picSelectedAudioAlbumArt.Cursor = System.Windows.Forms.Cursors.Default;
-            this.picSelectedAudioAlbumArt.InitialImage = global::SoundDeck.Properties.Resources.AlbumArtNotAvailable;
+            this.picSelectedAudioAlbumArt.InitialImage = global::Echo.Properties.Resources.AlbumArtNotAvailable;
             this.picSelectedAudioAlbumArt.Location = new System.Drawing.Point(33, 22);
             this.picSelectedAudioAlbumArt.Name = "picSelectedAudioAlbumArt";
             this.picSelectedAudioAlbumArt.Size = new System.Drawing.Size(260, 260);
@@ -288,7 +290,7 @@ namespace SoundDeck
             // 
             // pbtAddAudio
             // 
-            this.pbtAddAudio.Location = new System.Drawing.Point(325, 106);
+            this.pbtAddAudio.Location = new System.Drawing.Point(328, 152);
             this.pbtAddAudio.Name = "pbtAddAudio";
             this.pbtAddAudio.Size = new System.Drawing.Size(40, 24);
             this.pbtAddAudio.TabIndex = 11;
@@ -314,7 +316,7 @@ namespace SoundDeck
             this.ptxAudioFilePath.CustomButton.Visible = false;
             this.ptxAudioFilePath.Lines = new string[] {
         "..."};
-            this.ptxAudioFilePath.Location = new System.Drawing.Point(101, 106);
+            this.ptxAudioFilePath.Location = new System.Drawing.Point(104, 152);
             this.ptxAudioFilePath.MaxLength = 32767;
             this.ptxAudioFilePath.Name = "ptxAudioFilePath";
             this.ptxAudioFilePath.PasswordChar = '\0';
@@ -333,7 +335,7 @@ namespace SoundDeck
             // 
             // pbtBrowseAudio
             // 
-            this.pbtBrowseAudio.Location = new System.Drawing.Point(21, 106);
+            this.pbtBrowseAudio.Location = new System.Drawing.Point(24, 152);
             this.pbtBrowseAudio.Name = "pbtBrowseAudio";
             this.pbtBrowseAudio.Size = new System.Drawing.Size(60, 24);
             this.pbtBrowseAudio.TabIndex = 9;
@@ -355,7 +357,7 @@ namespace SoundDeck
             this.plvPlaylist.FullRowSelect = true;
             this.plvPlaylist.GridLines = true;
             this.plvPlaylist.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.plvPlaylist.Location = new System.Drawing.Point(21, 137);
+            this.plvPlaylist.Location = new System.Drawing.Point(24, 183);
             this.plvPlaylist.MultiSelect = false;
             this.plvPlaylist.Name = "plvPlaylist";
             this.plvPlaylist.OwnerDraw = true;
@@ -418,62 +420,88 @@ namespace SoundDeck
             this.tspSelectedAudioModify.Text = "Modifica";
             this.tspSelectedAudioModify.Click += new System.EventHandler(this.tspSelectedAudioModify_Click);
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            this.menuStrip1.Location = new System.Drawing.Point(20, 60);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(760, 24);
-            this.menuStrip1.TabIndex = 3;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsiPlaylistSave});
+            this.menuStrip.Location = new System.Drawing.Point(20, 60);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(760, 24);
+            this.menuStrip.TabIndex = 3;
+            this.menuStrip.Text = "menuStrip1";
             // 
-            // pbtDeleteDeleteAllAudio
+            // tsiPlaylistSave
             // 
-            this.pbtDeleteDeleteAllAudio.Location = new System.Drawing.Point(184, 545);
-            this.pbtDeleteDeleteAllAudio.Name = "pbtDeleteDeleteAllAudio";
-            this.pbtDeleteDeleteAllAudio.Size = new System.Drawing.Size(180, 24);
-            this.pbtDeleteDeleteAllAudio.TabIndex = 12;
-            this.pbtDeleteDeleteAllAudio.Text = "ADD";
-            this.pbtDeleteDeleteAllAudio.UseCustomBackColor = true;
-            this.pbtDeleteDeleteAllAudio.UseSelectable = true;
-            this.pbtDeleteDeleteAllAudio.UseStyleColors = true;
+            this.tsiPlaylistSave.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.salvaToolStripMenuItem});
+            this.tsiPlaylistSave.Name = "tsiPlaylistSave";
+            this.tsiPlaylistSave.Size = new System.Drawing.Size(56, 20);
+            this.tsiPlaylistSave.Text = "Playlist";
             // 
-            // pbtDeleteAudio
+            // salvaToolStripMenuItem
             // 
-            this.pbtDeleteAudio.Location = new System.Drawing.Point(21, 545);
-            this.pbtDeleteAudio.Name = "pbtDeleteAudio";
-            this.pbtDeleteAudio.Size = new System.Drawing.Size(157, 24);
-            this.pbtDeleteAudio.TabIndex = 13;
-            this.pbtDeleteAudio.Text = "ADD";
-            this.pbtDeleteAudio.UseCustomBackColor = true;
-            this.pbtDeleteAudio.UseSelectable = true;
-            this.pbtDeleteAudio.UseStyleColors = true;
+            this.salvaToolStripMenuItem.Name = "salvaToolStripMenuItem";
+            this.salvaToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.salvaToolStripMenuItem.Text = "Salva";
+            this.salvaToolStripMenuItem.Click += new System.EventHandler(this.salvaToolStripMenuItem_Click);
+            // 
+            // ptxPlaylistName
+            // 
+            // 
+            // 
+            // 
+            this.ptxPlaylistName.CustomButton.Image = null;
+            this.ptxPlaylistName.CustomButton.Location = new System.Drawing.Point(323, 1);
+            this.ptxPlaylistName.CustomButton.Name = "";
+            this.ptxPlaylistName.CustomButton.Size = new System.Drawing.Size(21, 21);
+            this.ptxPlaylistName.CustomButton.Style = ReaLTaiizor.Enum.Poison.ColorStyle.Blue;
+            this.ptxPlaylistName.CustomButton.TabIndex = 1;
+            this.ptxPlaylistName.CustomButton.Theme = ReaLTaiizor.Enum.Poison.ThemeStyle.Light;
+            this.ptxPlaylistName.CustomButton.UseSelectable = true;
+            this.ptxPlaylistName.CustomButton.Visible = false;
+            this.ptxPlaylistName.Lines = new string[0];
+            this.ptxPlaylistName.Location = new System.Drawing.Point(23, 111);
+            this.ptxPlaylistName.MaxLength = 32767;
+            this.ptxPlaylistName.Name = "ptxPlaylistName";
+            this.ptxPlaylistName.PasswordChar = '\0';
+            this.ptxPlaylistName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.ptxPlaylistName.SelectedText = "";
+            this.ptxPlaylistName.SelectionLength = 0;
+            this.ptxPlaylistName.SelectionStart = 0;
+            this.ptxPlaylistName.ShortcutsEnabled = true;
+            this.ptxPlaylistName.Size = new System.Drawing.Size(345, 23);
+            this.ptxPlaylistName.TabIndex = 12;
+            this.ptxPlaylistName.UseSelectable = true;
+            this.ptxPlaylistName.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.ptxPlaylistName.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 600);
-            this.Controls.Add(this.pbtDeleteAudio);
-            this.Controls.Add(this.pbtDeleteDeleteAllAudio);
+            this.Controls.Add(this.ptxPlaylistName);
             this.Controls.Add(this.poisonTabControl1);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.menuStrip);
             this.Controls.Add(this.pbtBrowseAudio);
             this.Controls.Add(this.pbtAddAudio);
             this.Controls.Add(this.plvPlaylist);
             this.Controls.Add(this.ptxAudioFilePath);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
+            this.MainMenuStrip = this.menuStrip;
             this.MaximumSize = new System.Drawing.Size(800, 600);
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "MainForm";
             this.Style = ReaLTaiizor.Enum.Poison.ColorStyle.Lime;
-            this.Text = "SoundDeck";
+            this.Text = "Echo";
             this.poisonTabControl1.ResumeLayout(false);
             this.poisonTabPage1.ResumeLayout(false);
             this.poisonPanel1.ResumeLayout(false);
             this.poisonPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSelectedAudioAlbumArt)).EndInit();
             this.pcmDeleteAudio.ResumeLayout(false);
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -504,14 +532,15 @@ namespace SoundDeck
         private ReaLTaiizor.Controls.PoisonPanel poisonPanel1;
         private ReaLTaiizor.Controls.PoisonLabel plbSelectedAudioPositionTrackTime;
         private ReaLTaiizor.Controls.PoisonLabel plbSelectedAudioPositionTime;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip menuStrip;
         private ReaLTaiizor.Controls.PoisonContextMenuStrip pcmDeleteAudio;
         private System.Windows.Forms.ToolStripMenuItem tspDeleteAudioAll;
-        private ReaLTaiizor.Controls.PoisonButton pbtDeleteDeleteAllAudio;
-        private ReaLTaiizor.Controls.PoisonButton pbtDeleteAudio;
         private System.Windows.Forms.ToolStripMenuItem tspSelectedAudio;
         private System.Windows.Forms.ToolStripMenuItem tspSelectedAudioDelete;
         private System.Windows.Forms.ToolStripMenuItem tspSelectedAudioModify;
+        private System.Windows.Forms.ToolStripMenuItem tsiPlaylistSave;
+        private System.Windows.Forms.ToolStripMenuItem salvaToolStripMenuItem;
+        private ReaLTaiizor.Controls.PoisonTextBox ptxPlaylistName;
     }
 }
 

@@ -1,4 +1,4 @@
-﻿namespace SoundDeck
+﻿namespace Echo
 {
     partial class ConfirmForm
     {

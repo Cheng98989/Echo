@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TagLib.Matroska;
 
-namespace SoundDeck
+namespace Echo
 {
     public static class UIHelper
     {

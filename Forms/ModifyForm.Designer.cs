@@ -1,4 +1,4 @@
-﻿namespace SoundDeck
+﻿namespace Echo
 {
     partial class ModifyForm
     {
@@ -336,7 +336,7 @@
             // picAudioAlbumArt
             // 
             this.picAudioAlbumArt.Cursor = System.Windows.Forms.Cursors.Default;
-            this.picAudioAlbumArt.InitialImage = global::SoundDeck.Properties.Resources.AlbumArtNotAvailable;
+            this.picAudioAlbumArt.InitialImage = global::Echo.Properties.Resources.AlbumArtNotAvailable;
             this.picAudioAlbumArt.Location = new System.Drawing.Point(488, 24);
             this.picAudioAlbumArt.Name = "picAudioAlbumArt";
             this.picAudioAlbumArt.Size = new System.Drawing.Size(224, 224);

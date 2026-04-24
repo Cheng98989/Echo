@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SoundDeck
+namespace Echo
 {
     public partial class ModifyForm : PoisonForm
     {

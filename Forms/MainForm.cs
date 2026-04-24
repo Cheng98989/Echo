@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using Microsoft.VisualBasic.Logging;
+using NAudio.Wave;
 using ReaLTaiizor.Controls;
 using ReaLTaiizor.Forms;
 using System;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TagLib.Matroska;
 
-namespace SoundDeck
+namespace Echo
 {
     public partial class MainForm : PoisonForm
     {
@@ -125,6 +126,7 @@ namespace SoundDeck
             int findResult = TrackMetaData.FindTrackIndexByTitleAndArtist(newTrack.Title, newTrack.Artist, playlist, playlistCount);
             if(findResult != -1)
             {
+                //Forse per evitare problemi durante il salvataggio di file meglio togliere la possibilita di avere stesso nome
                 DialogResult result = PoisonMessageBox.Show(
                 this,
                 $"È già presente nella playlist un brano con lo stesso titolo \"{newTrack.Title}\" " +
@@ -293,6 +295,77 @@ namespace SoundDeck
 
             if(mf.DialogResult == DialogResult.OK)
                 playlist[selectedIndex] = mf.audioTrack;
+        }
+
+        //Salvataggio su file in cui le canzoni dal percorso file iniziale vengono copiate in una cartella e il percorso file viene anche modificato
+        private void salvaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Controllo
+            if (playlistCount <= 0)
+            {
+                MessageBox.Show("Playlist Vuota");
+                return;
+            }
+            string playlistName = ptxPlaylistName.Text.Trim();
+            if (string.IsNullOrEmpty(playlistName))
+            {
+                PoisonMessageBox.Show(
+                    this,
+                    "Nome della playlist mancante"
+                    );
+                return;
+            }
+
+            //Richiesta conferma via poisonmessagebox
+
+            
+            if (!StringHelper.CanBeADirectoryOrFileName(playlistName))
+            {
+                PoisonMessageBox.Show(
+                    this,
+                    $"Il titolo (max: 30 caratteri) non puo' contenere i seguenti caratteri \n" +
+                    $"{string.Join(", ", AppDefaults.NotAllowedCharsInDirectoryOrFileName)}"
+                    );
+                return;
+            }
+
+            playlistName = playlistName.Replace(' ', AppDefaults.SubstituteToSpaceInDirectoryOrFileName);
+
+            string playlistPath = Path.Combine(AppDefaults.AudioTrackSavePath, playlistName);
+
+            if (!Directory.Exists(playlistPath))
+            {
+                Directory.CreateDirectory(playlistPath);
+            }
+
+
+            try
+            {
+                for (int i = 0; i < playlistCount; i++)
+                {
+                    if (!System.IO.File.Exists(playlist[i].FilePath))
+                    {
+                        PoisonMessageBox.Show(
+                            this,
+                            $"Errore durante il salvattaggio di {playlist[i].FilePath}, file non trovato"
+                            );
+                        return;
+                    }
+                    string audioTrackFileName = Path.GetFileName(playlist[i].FilePath);
+                    string destination = Path.Combine(playlistPath, audioTrackFileName);
+                    System.IO.File.Copy(playlist[i].FilePath,destination,true);
+                    TrackMetaData.OverwriteMP3MetaTags(destination, playlist[i]);
+                }
+            }
+            catch (Exception ex)
+            {
+                PoisonMessageBox.Show(
+                            this,
+                            $"Errore {ex.Message}"
+                            );
+            }
+
+            
         }
     }
 }
