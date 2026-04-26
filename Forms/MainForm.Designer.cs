@@ -42,16 +42,12 @@ namespace Echo
             this.picSelectedAudioAlbumArt = new System.Windows.Forms.PictureBox();
             this.plbSelectedAudioTitle = new ReaLTaiizor.Controls.PoisonLabel();
             this.plbSelectedAudioPositionTrackTime = new ReaLTaiizor.Controls.PoisonLabel();
-            this.ptlSelectedAudioStop = new ReaLTaiizor.Controls.PoisonTile();
             this.ptlSelectedAudioVolumePct = new ReaLTaiizor.Controls.PoisonTile();
             this.psbSelectedAudioVolume = new ReaLTaiizor.Controls.PoisonScrollBar();
-            this.ptlSelectedAudioPause = new ReaLTaiizor.Controls.PoisonTile();
             this.ptlSelectedAudioPlay = new ReaLTaiizor.Controls.PoisonTile();
             this.ptbSelectedAudioPosition = new ReaLTaiizor.Controls.PoisonTrackBar();
             this.poisonTabPage2 = new ReaLTaiizor.Controls.PoisonTabPage();
-            this.pbtAddAudio = new ReaLTaiizor.Controls.PoisonButton();
-            this.ptxAudioFilePath = new ReaLTaiizor.Controls.PoisonTextBox();
-            this.pbtBrowseAudio = new ReaLTaiizor.Controls.PoisonButton();
+            this.pbtBrowseAddAudio = new ReaLTaiizor.Controls.PoisonButton();
             this.plvPlaylist = new ReaLTaiizor.Controls.PoisonListView();
             this.colAudioTitle = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAudioArtist = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -95,10 +91,8 @@ namespace Echo
             this.poisonTabPage1.Controls.Add(this.plbSelectedAudioPositionTime);
             this.poisonTabPage1.Controls.Add(this.poisonPanel1);
             this.poisonTabPage1.Controls.Add(this.plbSelectedAudioPositionTrackTime);
-            this.poisonTabPage1.Controls.Add(this.ptlSelectedAudioStop);
             this.poisonTabPage1.Controls.Add(this.ptlSelectedAudioVolumePct);
             this.poisonTabPage1.Controls.Add(this.psbSelectedAudioVolume);
-            this.poisonTabPage1.Controls.Add(this.ptlSelectedAudioPause);
             this.poisonTabPage1.Controls.Add(this.ptlSelectedAudioPlay);
             this.poisonTabPage1.Controls.Add(this.ptbSelectedAudioPosition);
             this.poisonTabPage1.HorizontalScrollbarBarColor = true;
@@ -212,22 +206,6 @@ namespace Echo
             this.plbSelectedAudioPositionTrackTime.UseCustomBackColor = true;
             this.plbSelectedAudioPositionTrackTime.Visible = false;
             // 
-            // ptlSelectedAudioStop
-            // 
-            this.ptlSelectedAudioStop.ActiveControl = null;
-            this.ptlSelectedAudioStop.BackColor = System.Drawing.Color.Transparent;
-            this.ptlSelectedAudioStop.DisplayFocusBorder = false;
-            this.ptlSelectedAudioStop.Location = new System.Drawing.Point(208, 488);
-            this.ptlSelectedAudioStop.Name = "ptlSelectedAudioStop";
-            this.ptlSelectedAudioStop.Size = new System.Drawing.Size(40, 40);
-            this.ptlSelectedAudioStop.TabIndex = 14;
-            this.ptlSelectedAudioStop.TileImage = global::Echo.Properties.Resources.StopAudio;
-            this.ptlSelectedAudioStop.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.ptlSelectedAudioStop.UseCustomBackColor = true;
-            this.ptlSelectedAudioStop.UseSelectable = true;
-            this.ptlSelectedAudioStop.UseTileImage = true;
-            this.ptlSelectedAudioStop.Click += new System.EventHandler(this.ptlSelectedAudioStop_Click);
-            // 
             // ptlSelectedAudioVolumePct
             // 
             this.ptlSelectedAudioVolumePct.ActiveControl = null;
@@ -259,28 +237,12 @@ namespace Echo
             this.psbSelectedAudioVolume.UseSelectable = true;
             this.psbSelectedAudioVolume.Scroll += new System.Windows.Forms.ScrollEventHandler(this.psbSelectedAudioVolume_Scroll);
             // 
-            // ptlSelectedAudioPause
-            // 
-            this.ptlSelectedAudioPause.ActiveControl = null;
-            this.ptlSelectedAudioPause.BackColor = System.Drawing.Color.Transparent;
-            this.ptlSelectedAudioPause.DisplayFocusBorder = false;
-            this.ptlSelectedAudioPause.Location = new System.Drawing.Point(144, 488);
-            this.ptlSelectedAudioPause.Name = "ptlSelectedAudioPause";
-            this.ptlSelectedAudioPause.Size = new System.Drawing.Size(40, 40);
-            this.ptlSelectedAudioPause.TabIndex = 13;
-            this.ptlSelectedAudioPause.TileImage = global::Echo.Properties.Resources.PauseAudio;
-            this.ptlSelectedAudioPause.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.ptlSelectedAudioPause.UseCustomBackColor = true;
-            this.ptlSelectedAudioPause.UseSelectable = true;
-            this.ptlSelectedAudioPause.UseTileImage = true;
-            this.ptlSelectedAudioPause.Click += new System.EventHandler(this.ptlSelectedAudioPause_Click);
-            // 
             // ptlSelectedAudioPlay
             // 
             this.ptlSelectedAudioPlay.ActiveControl = null;
             this.ptlSelectedAudioPlay.BackColor = System.Drawing.Color.Transparent;
             this.ptlSelectedAudioPlay.DisplayFocusBorder = false;
-            this.ptlSelectedAudioPlay.Location = new System.Drawing.Point(80, 488);
+            this.ptlSelectedAudioPlay.Location = new System.Drawing.Point(144, 488);
             this.ptlSelectedAudioPlay.Name = "ptlSelectedAudioPlay";
             this.ptlSelectedAudioPlay.Size = new System.Drawing.Size(40, 40);
             this.ptlSelectedAudioPlay.TabIndex = 12;
@@ -320,62 +282,17 @@ namespace Echo
             this.poisonTabPage2.VerticalScrollbarHighlightOnWheel = false;
             this.poisonTabPage2.VerticalScrollbarSize = 10;
             // 
-            // pbtAddAudio
+            // pbtBrowseAddAudio
             // 
-            this.pbtAddAudio.Location = new System.Drawing.Point(328, 152);
-            this.pbtAddAudio.Name = "pbtAddAudio";
-            this.pbtAddAudio.Size = new System.Drawing.Size(40, 24);
-            this.pbtAddAudio.TabIndex = 11;
-            this.pbtAddAudio.Text = "ADD";
-            this.pbtAddAudio.UseCustomBackColor = true;
-            this.pbtAddAudio.UseSelectable = true;
-            this.pbtAddAudio.UseStyleColors = true;
-            this.pbtAddAudio.Click += new System.EventHandler(this.pbtAddAudio_Click);
-            // 
-            // ptxAudioFilePath
-            // 
-            // 
-            // 
-            // 
-            this.ptxAudioFilePath.CustomButton.Image = null;
-            this.ptxAudioFilePath.CustomButton.Location = new System.Drawing.Point(186, 2);
-            this.ptxAudioFilePath.CustomButton.Name = "";
-            this.ptxAudioFilePath.CustomButton.Size = new System.Drawing.Size(19, 19);
-            this.ptxAudioFilePath.CustomButton.Style = ReaLTaiizor.Enum.Poison.ColorStyle.Blue;
-            this.ptxAudioFilePath.CustomButton.TabIndex = 1;
-            this.ptxAudioFilePath.CustomButton.Theme = ReaLTaiizor.Enum.Poison.ThemeStyle.Light;
-            this.ptxAudioFilePath.CustomButton.UseSelectable = true;
-            this.ptxAudioFilePath.CustomButton.Visible = false;
-            this.ptxAudioFilePath.Lines = new string[] {
-        "..."};
-            this.ptxAudioFilePath.Location = new System.Drawing.Point(104, 152);
-            this.ptxAudioFilePath.MaxLength = 32767;
-            this.ptxAudioFilePath.Name = "ptxAudioFilePath";
-            this.ptxAudioFilePath.PasswordChar = '\0';
-            this.ptxAudioFilePath.ReadOnly = true;
-            this.ptxAudioFilePath.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.ptxAudioFilePath.SelectedText = "";
-            this.ptxAudioFilePath.SelectionLength = 0;
-            this.ptxAudioFilePath.SelectionStart = 0;
-            this.ptxAudioFilePath.ShortcutsEnabled = true;
-            this.ptxAudioFilePath.Size = new System.Drawing.Size(208, 24);
-            this.ptxAudioFilePath.TabIndex = 10;
-            this.ptxAudioFilePath.Text = "...";
-            this.ptxAudioFilePath.UseSelectable = true;
-            this.ptxAudioFilePath.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
-            this.ptxAudioFilePath.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
-            // 
-            // pbtBrowseAudio
-            // 
-            this.pbtBrowseAudio.Location = new System.Drawing.Point(24, 152);
-            this.pbtBrowseAudio.Name = "pbtBrowseAudio";
-            this.pbtBrowseAudio.Size = new System.Drawing.Size(60, 24);
-            this.pbtBrowseAudio.TabIndex = 9;
-            this.pbtBrowseAudio.Text = "BROWSE";
-            this.pbtBrowseAudio.UseCustomBackColor = true;
-            this.pbtBrowseAudio.UseSelectable = true;
-            this.pbtBrowseAudio.UseStyleColors = true;
-            this.pbtBrowseAudio.Click += new System.EventHandler(this.pbtBrowseAudio_Click);
+            this.pbtBrowseAddAudio.Location = new System.Drawing.Point(24, 152);
+            this.pbtBrowseAddAudio.Name = "pbtBrowseAddAudio";
+            this.pbtBrowseAddAudio.Size = new System.Drawing.Size(288, 24);
+            this.pbtBrowseAddAudio.TabIndex = 9;
+            this.pbtBrowseAddAudio.Text = "BROWSE";
+            this.pbtBrowseAddAudio.UseCustomBackColor = true;
+            this.pbtBrowseAddAudio.UseSelectable = true;
+            this.pbtBrowseAddAudio.UseStyleColors = true;
+            this.pbtBrowseAddAudio.Click += new System.EventHandler(this.pbtBrowseAddAudio_Click);
             // 
             // plvPlaylist
             // 
@@ -536,10 +453,8 @@ namespace Echo
             this.Controls.Add(this.ptxPlaylistName);
             this.Controls.Add(this.poisonTabControl1);
             this.Controls.Add(this.menuStrip);
-            this.Controls.Add(this.pbtBrowseAudio);
-            this.Controls.Add(this.pbtAddAudio);
+            this.Controls.Add(this.pbtBrowseAddAudio);
             this.Controls.Add(this.plvPlaylist);
-            this.Controls.Add(this.ptxAudioFilePath);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip;
             this.MaximumSize = new System.Drawing.Size(800, 700);
@@ -573,14 +488,10 @@ namespace Echo
         private System.Windows.Forms.PictureBox picSelectedAudioAlbumArt;
         private ReaLTaiizor.Controls.PoisonScrollBar psbSelectedAudioVolume;
         private ReaLTaiizor.Controls.PoisonTile ptlSelectedAudioVolumePct;
-        private ReaLTaiizor.Controls.PoisonButton pbtBrowseAudio;
-        private ReaLTaiizor.Controls.PoisonButton pbtAddAudio;
-        private ReaLTaiizor.Controls.PoisonTextBox ptxAudioFilePath;
+        private ReaLTaiizor.Controls.PoisonButton pbtBrowseAddAudio;
         private System.Windows.Forms.ColumnHeader colAudioArtist;
         private System.Windows.Forms.ColumnHeader colAudioDuration;
         private System.Windows.Forms.ColumnHeader colAudioTitle;
-        private ReaLTaiizor.Controls.PoisonTile ptlSelectedAudioStop;
-        private ReaLTaiizor.Controls.PoisonTile ptlSelectedAudioPause;
         private ReaLTaiizor.Controls.PoisonTile ptlSelectedAudioPlay;
         private ReaLTaiizor.Controls.PoisonLabel plbSelectedAudioArtist;
         private ReaLTaiizor.Controls.PoisonLabel plbSelectedAudioTitle;

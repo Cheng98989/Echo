@@ -54,16 +54,6 @@ namespace Echo
                 ptlSelectedAudioPlay.Width,
                 ptlSelectedAudioPlay.Height
                 );
-            ptlSelectedAudioPause.TileImage = ImageHelper.ResizeImage(
-                ptlSelectedAudioPause.TileImage,
-                ptlSelectedAudioPause.Width,
-                ptlSelectedAudioPause.Height
-                );
-            ptlSelectedAudioStop.TileImage = ImageHelper.ResizeImage(
-                ptlSelectedAudioStop.TileImage,
-                ptlSelectedAudioStop.Width,
-                ptlSelectedAudioStop.Height
-                );
 
             // Posizione iniziale label tempo
             plbSelectedAudioPositionTrackTime.Location = UIHelper.GetTrackTimeLabelPosition(
@@ -127,77 +117,79 @@ namespace Echo
         private void plvPlaylist_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (plvPlaylist.FocusedItem == null) return;
-
-            int audioIndex = plvPlaylist.FocusedItem.Index;
-            plbSelectedAudioTitle.Text = playlist[audioIndex].Title;
-            plbSelectedAudioArtist.Text = playlist[audioIndex].Artist;
-            UIHelper.ShowImageInPictureBox(picSelectedAudioAlbumArt, playlist[audioIndex].AlbumArt);
+            int audioIndex = plvPlaylist.Items.IndexOf(plvPlaylist.FocusedItem); ;
+            updateAudioTrackPanel(audioIndex);
+        }
+        private void updateAudioTrackPanel(int index)
+        {
+            plbSelectedAudioTitle.Text = playlist[index].Title;
+            plbSelectedAudioArtist.Text = playlist[index].Artist;
+            UIHelper.ShowImageInPictureBox(picSelectedAudioAlbumArt, playlist[index].AlbumArt);
         }
 
         // Gestione playlist
-        private void pbtBrowseAudio_Click(object sender, EventArgs e)
+        private void pbtBrowseAddAudio_Click(object sender, EventArgs e)
         {
+            // Limite brani
+            
             // Selezione file
             OpenFileDialog openFileManager = new OpenFileDialog();
             openFileManager.Filter = "File MP3|*.mp3";
             openFileManager.Title = "Seleziona un audio";
             openFileManager.InitialDirectory = Directory.GetDirectoryRoot(AppDefaults.BrowseAudioTracksInitialDirectory);
+            openFileManager.Multiselect = true;
+            if (openFileManager.ShowDialog() != DialogResult.OK)
+                return;
 
-            if (openFileManager.ShowDialog() == DialogResult.OK)
+            foreach (string filePath in openFileManager.FileNames)
             {
-                ptxAudioFilePath.Text = openFileManager.FileName;
-            }
-        }
+                if (playlistCount >= AppDefaults.MaxLoadedTracks)
+                {
+                    PoisonMessageBox.Show(
+                        this,
+                        "Hai raggiunto il numero massimo di brani caricabili nella playlist.",
+                        "Limite raggiunto",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                        );
+                    break;
+                }
+                // Verifica file
 
-        private void pbtAddAudio_Click(object sender, EventArgs e)
-        {
-            // Limite brani
-            if (playlistCount >= AppDefaults.MaxLoadedTracks)
-            {
-                PoisonMessageBox.Show(
+                if (!System.IO.File.Exists(filePath))
+                {
+                    PoisonMessageBox.Show(
+                        this,
+                        "Il file selezionato non esiste o non è più disponibile.",
+                        "File non trovato",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                        );
+                    return;
+                }
+                
+                // Evito duplicati per path
+                TrackMetaData.AudioTrack newTrack = TrackMetaData.FromFile(filePath);
+                int findResult = TrackMetaData.FindTrackIndexByFilePath(filePath, playlist, playlistCount);
+                if (findResult != -1)
+                {
+                    DialogResult result = PoisonMessageBox.Show(
                     this,
-                    "Hai raggiunto il numero massimo di brani cargabili nella playlist.",
-                    "Limite raggiunto",
+                    $"È già presente nella playlist un brano dallo stesso percorso file \"{newTrack.Title}\"\n" +
+                    $"Non verrà aggiunto nuovamente.",
+                    "Brano duplicato",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning
                     );
-                return;
+                    continue;
+                }
+
+                playlist[playlistCount] = newTrack;
+                playlistCount++;  
             }
-
-            // Verifica file
-            string filePath = ptxAudioFilePath.Text;
-            if (!System.IO.File.Exists(filePath))
-            {
-                PoisonMessageBox.Show(
-                    this,
-                    "Il file selezionato non esiste o non è più disponibile.",
-                    "File non trovato",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                    );
-                return;
-            }
-
-            // Evito duplicati per path
-            TrackMetaData.AudioTrack newTrack = TrackMetaData.FromFile(filePath);
-            int findResult = TrackMetaData.FindTrackIndexByFilePath(filePath, playlist, playlistCount);
-            if(findResult != -1)
-            {
-                DialogResult result = PoisonMessageBox.Show(
-                this,
-                $"È già presente nella playlist un brano dallo stesso percorso file \"{newTrack.Title}\"",
-                "Brano duplicato",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Warning
-                );
-                return;
-            } 
-
-            playlist[playlistCount] = newTrack;
-            playlistCount++;
-
-            UIHelper.PopulatePlaylistListView(playlist,playlistCount,plvPlaylist);
+            UIHelper.PopulatePlaylistListView(playlist, playlistCount, plvPlaylist);
         }
+
 
         private void tspSelectedAudioModify_Click(object sender, EventArgs e)
         {
@@ -212,7 +204,7 @@ namespace Echo
                     );
                 return;
             }
-            int selectedIndex = plvPlaylist.FocusedItem.Index;
+            int selectedIndex = plvPlaylist.Items.IndexOf(plvPlaylist.FocusedItem); ;
 
             ModifyForm mf = new ModifyForm(playlist[selectedIndex]);
             mf.ShowDialog();
@@ -234,7 +226,7 @@ namespace Echo
                     );
                 return;
             }
-            int selectedIndex = plvPlaylist.FocusedItem.Index;
+            int selectedIndex = plvPlaylist.Items.IndexOf(plvPlaylist.FocusedItem); ;
 
             TrackMetaData.DeleteAudioTrackFromArray(selectedIndex, playlist, ref playlistCount, true);
 
@@ -294,10 +286,11 @@ namespace Echo
 
             // Recupero indice brano
             int audioIndex = default;
+            
             if (plvPlaylist.FocusedItem == null)
                 audioIndex = TrackMetaData.FindTrackIndexByTitleAndArtist(plbSelectedAudioTitle.Text, plbSelectedAudioArtist.Text, playlist, playlistCount);
             else
-                audioIndex = plvPlaylist.FocusedItem.Index;
+                audioIndex = plvPlaylist.Items.IndexOf(plvPlaylist.FocusedItem);
 
             // Brano non trovato
             if (audioIndex == -1)
@@ -350,15 +343,7 @@ namespace Echo
         }
 
 
-        private void ptlSelectedAudioPause_Click(object sender, EventArgs e)
-        {
-            TrackManager.PauseTrack(waveOutDevice);
-        }
-
-        private void ptlSelectedAudioStop_Click(object sender, EventArgs e)
-        {
-            TrackManager.StopTrack(ref audioFileReader, ref waveOutDevice);
-        }
+        
 
         // Salvataggio playlist
         private void salvaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -628,6 +613,9 @@ namespace Echo
                             audioIndex = rand.Next(0, playlistCount);
                         }
                         while(previusTrackFilePath == playlist[audioIndex].FilePath);
+                        plvPlaylist.FocusedItem = plvPlaylist.Items[audioIndex];
+                        updateAudioTrackPanel(audioIndex);
+                        UIHelper.UpdateAudioPoisonTileState(waveOutDevice, audioFileReader, ptlSelectedAudioPlay);
                         float startVolume = UIHelper.psbValueTowaveOutEventVolume(psbSelectedAudioVolume.Value);
                         TrackManager.StartTrack(playlist[audioIndex], ref audioFileReader, ref waveOutDevice, startVolume);
                         ptbSelectedAudioPosition.Maximum = (int)playlist[audioIndex].Duration.TotalSeconds;
