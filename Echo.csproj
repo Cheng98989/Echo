@@ -131,13 +131,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDefaults.cs" />
+    <Compile Include="AudioTrackClasses\TrackStatus.cs" />
     <Compile Include="Forms\ModifyForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ModifyForm.Designer.cs">
       <DependentUpon>ModifyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\ModalitaRiproduzione.cs" />
+    <Compile Include="Playback.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="AudioTrackClasses\TrackManager.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />

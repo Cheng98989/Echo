@@ -140,6 +140,7 @@ namespace Echo
 
             audioTrack = a;
             this.DialogResult = DialogResult.OK;
+            audioFile.Dispose();
             this.Close();
         }
         /// <summary>

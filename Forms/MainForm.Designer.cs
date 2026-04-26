@@ -34,6 +34,8 @@ namespace Echo
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.poisonTabControl1 = new ReaLTaiizor.Controls.PoisonTabControl();
             this.poisonTabPage1 = new ReaLTaiizor.Controls.PoisonTabPage();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pcbPlaybackMode = new ReaLTaiizor.Controls.PoisonComboBox();
             this.plbSelectedAudioPositionTime = new ReaLTaiizor.Controls.PoisonLabel();
             this.poisonPanel1 = new ReaLTaiizor.Controls.PoisonPanel();
             this.plbSelectedAudioArtist = new ReaLTaiizor.Controls.PoisonLabel();
@@ -66,9 +68,9 @@ namespace Echo
             this.playlistsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ptxPlaylistName = new ReaLTaiizor.Controls.PoisonTextBox();
             this.audioPositionTimer = new System.Windows.Forms.Timer(this.components);
-            this.poisonComboBox1 = new ReaLTaiizor.Controls.PoisonComboBox();
             this.poisonTabControl1.SuspendLayout();
             this.poisonTabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.poisonPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSelectedAudioAlbumArt)).BeginInit();
             this.pcmDeleteAudio.SuspendLayout();
@@ -88,7 +90,8 @@ namespace Echo
             // 
             // poisonTabPage1
             // 
-            this.poisonTabPage1.Controls.Add(this.poisonComboBox1);
+            this.poisonTabPage1.Controls.Add(this.pictureBox2);
+            this.poisonTabPage1.Controls.Add(this.pcbPlaybackMode);
             this.poisonTabPage1.Controls.Add(this.plbSelectedAudioPositionTime);
             this.poisonTabPage1.Controls.Add(this.poisonPanel1);
             this.poisonTabPage1.Controls.Add(this.plbSelectedAudioPositionTrackTime);
@@ -110,11 +113,33 @@ namespace Echo
             this.poisonTabPage1.VerticalScrollbarHighlightOnWheel = false;
             this.poisonTabPage1.VerticalScrollbarSize = 10;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Location = new System.Drawing.Point(216, 344);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(24, 24);
+            this.pictureBox2.TabIndex = 21;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pcbPlaybackMode
+            // 
+            this.pcbPlaybackMode.DropDownHeight = 100;
+            this.pcbPlaybackMode.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.pcbPlaybackMode.FontSize = ReaLTaiizor.Extension.Poison.PoisonComboBoxSize.Small;
+            this.pcbPlaybackMode.FormattingEnabled = true;
+            this.pcbPlaybackMode.IntegralHeight = false;
+            this.pcbPlaybackMode.ItemHeight = 19;
+            this.pcbPlaybackMode.Location = new System.Drawing.Point(248, 344);
+            this.pcbPlaybackMode.Name = "pcbPlaybackMode";
+            this.pcbPlaybackMode.Size = new System.Drawing.Size(89, 25);
+            this.pcbPlaybackMode.TabIndex = 20;
+            this.pcbPlaybackMode.UseSelectable = true;
+            // 
             // plbSelectedAudioPositionTime
             // 
             this.plbSelectedAudioPositionTime.AutoSize = true;
             this.plbSelectedAudioPositionTime.BackColor = System.Drawing.Color.Transparent;
-            this.plbSelectedAudioPositionTime.Location = new System.Drawing.Point(224, 416);
+            this.plbSelectedAudioPositionTime.Location = new System.Drawing.Point(24, 424);
             this.plbSelectedAudioPositionTime.Name = "plbSelectedAudioPositionTime";
             this.plbSelectedAudioPositionTime.Size = new System.Drawing.Size(84, 19);
             this.plbSelectedAudioPositionTime.TabIndex = 19;
@@ -288,7 +313,7 @@ namespace Echo
             this.poisonTabPage2.HorizontalScrollbarSize = 10;
             this.poisonTabPage2.Location = new System.Drawing.Point(4, 38);
             this.poisonTabPage2.Name = "poisonTabPage2";
-            this.poisonTabPage2.Size = new System.Drawing.Size(414, 463);
+            this.poisonTabPage2.Size = new System.Drawing.Size(414, 543);
             this.poisonTabPage2.TabIndex = 1;
             this.poisonTabPage2.Text = "poisonTabPage2";
             this.poisonTabPage2.VerticalScrollbarBarColor = true;
@@ -503,17 +528,6 @@ namespace Echo
             this.audioPositionTimer.Interval = 1000;
             this.audioPositionTimer.Tick += new System.EventHandler(this.audioPositionTimer_Tick);
             // 
-            // poisonComboBox1
-            // 
-            this.poisonComboBox1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.poisonComboBox1.FormattingEnabled = true;
-            this.poisonComboBox1.ItemHeight = 23;
-            this.poisonComboBox1.Location = new System.Drawing.Point(208, 344);
-            this.poisonComboBox1.Name = "poisonComboBox1";
-            this.poisonComboBox1.Size = new System.Drawing.Size(129, 29);
-            this.poisonComboBox1.TabIndex = 20;
-            this.poisonComboBox1.UseSelectable = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -536,6 +550,7 @@ namespace Echo
             this.poisonTabControl1.ResumeLayout(false);
             this.poisonTabPage1.ResumeLayout(false);
             this.poisonTabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.poisonPanel1.ResumeLayout(false);
             this.poisonPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSelectedAudioAlbumArt)).EndInit();
@@ -584,7 +599,8 @@ namespace Echo
         private System.Windows.Forms.ToolStripMenuItem caricaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem playlistsToolStripMenuItem;
         private System.Windows.Forms.Timer audioPositionTimer;
-        private ReaLTaiizor.Controls.PoisonComboBox poisonComboBox1;
+        private ReaLTaiizor.Controls.PoisonComboBox pcbPlaybackMode;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }
 

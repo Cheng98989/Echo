@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Echo.Helpers
 {
-    public static class ModalitaRiproduzione
+    public static class Playback
     {
-        public enum e_ModalitaRiproduzione
+        public enum PlaybackMode
         {
-            Singolo = 0,
+            Single = 0,
             Loop = 1,
-            Casuale = 2,
+            Shuffle = 2,
         }
     }
 }

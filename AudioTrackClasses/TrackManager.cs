@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using Echo.AudioTrackClasses;
+using NAudio.Wave;
 using ReaLTaiizor.Controls;
 using System;
 using System.Collections.Generic;
@@ -11,23 +12,8 @@ namespace Echo
 {
     public static class TrackManager
     {
-        public static void StartTrack(TrackMetaData.AudioTrack audio,ref AudioFileReader audioFileReader, ref WaveOutEvent waveOutEvent, float volume)
+        public static void StartTrack(TrackMetaData.AudioTrack audio, ref AudioFileReader audioFileReader, ref WaveOutEvent waveOutEvent, float volume)
         {
-            //Sto togliendo lastvolume e derivati
-            //float previusAudioVolume = AppDefaults.DefaultVolumeMultiplier;
-            if (waveOutEvent != null && waveOutEvent.PlaybackState == PlaybackState.Playing)
-            {
-                StopTrack(ref audioFileReader, ref waveOutEvent);
-                return;
-            }
-                
-
-            if (waveOutEvent != null && waveOutEvent.PlaybackState == PlaybackState.Paused)
-            {
-                waveOutEvent.Play();
-                return;
-            }
-
             try
             {
                 audioFileReader = new AudioFileReader(audio.FilePath);
@@ -52,10 +38,10 @@ namespace Echo
                     );
             }
             //return previusAudioVolume;
-            
+
         }
 
-        public static void StopTrack(ref AudioFileReader audioFileReader,ref WaveOutEvent waveOutEvent)
+        public static void StopTrack(ref AudioFileReader audioFileReader, ref WaveOutEvent waveOutEvent)
         {
             //Tolto last volume
             //float lastVolume = AppDefaults.DefaultVolumeMultiplier;
@@ -77,6 +63,21 @@ namespace Echo
         {
             if (waveOutEvent != null && waveOutEvent.PlaybackState == PlaybackState.Playing)
                 waveOutEvent.Pause();
+        }
+
+        public static void LoopTrack(ref AudioFileReader audioFileReader, ref WaveOutEvent waveOutEvent)
+        {
+            if (audioFileReader == null)
+                throw new ArgumentNullException("An audiotrack must be first initializated before looping");
+            audioFileReader.Position = 0;
+            waveOutEvent.Init(audioFileReader);
+            waveOutEvent.Play();
+        }
+
+        public static void ResumeTrack(WaveOutEvent waveOutEvent)
+        {
+            if (TrackStatus.IsTrackPaused(waveOutEvent))
+                waveOutEvent.Play();
         }
     }
 }

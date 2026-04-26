@@ -1,6 +1,8 @@
+using Echo.Helpers;
 using System;
 using System.Drawing;
 using System.IO;
+using System.Windows.Forms;
 using TagLib.Matroska;
 
 namespace Echo
@@ -10,6 +12,9 @@ namespace Echo
     /// </summary>
     public static class AppDefaults
     {
+        public const Playback.PlaybackMode DefaultPlaybackMode = Playback.PlaybackMode.Loop;
+        
+
         public static string BrowseAudioTracksInitialDirectory = "C:";
 
         //AudioTrack save path

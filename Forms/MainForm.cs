@@ -1,4 +1,5 @@
-﻿using Echo.Helpers;
+﻿using Echo.AudioTrackClasses;
+using Echo.Helpers;
 using Microsoft.VisualBasic.Logging;
 using NAudio.Utils;
 using NAudio.Wave;
@@ -25,7 +26,7 @@ namespace Echo
         // Stato form
         private TrackMetaData.AudioTrack[] playlist = new TrackMetaData.AudioTrack[AppDefaults.MaxLoadedTracks];
         private int playlistCount = default;
-        private ModalitaRiproduzione.e_ModalitaRiproduzione modalitaRiproduzione = 0;
+        private Playback.PlaybackMode mode = AppDefaults.DefaultPlaybackMode;
 
         private WaveOutEvent waveOutDevice;
         private AudioFileReader audioFileReader;
@@ -75,6 +76,10 @@ namespace Echo
             );
             
             plbSelectedAudioPositionTrackTime.Text = TrackMetaData.FormatTrackTime(ptbSelectedAudioPosition.Value);
+
+            pcbPlaybackMode.Items.Clear();
+            pcbPlaybackMode.Items.AddRange(Enum.GetNames(typeof(Playback.PlaybackMode)));
+            pcbPlaybackMode.SelectedItem = mode.ToString();
         }
 
         // Chiusura form
@@ -273,6 +278,7 @@ namespace Echo
         // Riproduzione
         private void ptlSelectedAudioPlay_Click(object sender, EventArgs e)
         {
+
             // Verifica playlist
             if (playlistCount <= 0)
             {
@@ -305,14 +311,44 @@ namespace Echo
                     );
                 return;
             }
+            if(audioFileReader != null)
+            {
+                string previusTrackFilePath = audioFileReader.FileName;
+                //pause alla traccia se è  in riproduzione e index della traccia in riproduzione è uguale a quello del brano selezionato
+                if (TrackStatus.IsTrackPlaying(waveOutDevice) && audioFileReader != null)
+                {
+                    
+                    TrackManager.PauseTrack(waveOutDevice);
+                    if (previusTrackFilePath == playlist[audioIndex].FilePath)
+                    {
+                        UIHelper.UpdateAudioPoisonTileState(waveOutDevice, audioFileReader, ptlSelectedAudioPlay);
+                        return;
+                    }
+                        
+                }
+                if(TrackStatus.IsTrackPaused(waveOutDevice) && audioFileReader != null)
+                {
+                    if (previusTrackFilePath == playlist[audioIndex].FilePath)
+                    {
+                        TrackManager.ResumeTrack(waveOutDevice);
+                        UIHelper.UpdateAudioPoisonTileState(waveOutDevice, audioFileReader, ptlSelectedAudioPlay);
+                        audioPositionTimer.Start();
+                        
+                        return;
+                    }
+                }
+            }
 
             // Avvio traccia
             float startVolume = UIHelper.psbValueTowaveOutEventVolume(psbSelectedAudioVolume.Value);
             TrackManager.StartTrack(playlist[audioIndex], ref audioFileReader, ref waveOutDevice, startVolume);
+            UIHelper.UpdateAudioPoisonTileState(waveOutDevice, audioFileReader, ptlSelectedAudioPlay);
             ptbSelectedAudioPosition.Maximum = (int)playlist[audioIndex].Duration.TotalSeconds;
             audioPositionTimer.Stop();
             audioPositionTimer.Start();
+            
         }
+
 
         private void ptlSelectedAudioPause_Click(object sender, EventArgs e)
         {
@@ -559,30 +595,57 @@ namespace Echo
 
         private void audioPositionTimer_Tick(object sender, EventArgs e)
         {
-            if(waveOutDevice ==  null || audioFileReader == null)
+            if(!TrackStatus.IsInitialized(waveOutDevice, audioFileReader))
             {
                 audioPositionTimer.Stop();
                 UIHelper.ResetPoisonTrackBar(ptbSelectedAudioPosition);
                 plbSelectedAudioPositionTime.Text = $"{TrackMetaData.FormatTrackTime(0)}/{TrackMetaData.FormatTrackTime(0)}";
                 return;
             }
-            //canzone in pausa
-            if(waveOutDevice.PlaybackState == PlaybackState.Paused)
+            //fine riproduzione canzone
+            if (TrackStatus.IsTrackStopped(waveOutDevice) && audioFileReader != null)
             {
                 audioPositionTimer.Stop();
-                return;
+                switch (pcbPlaybackMode.SelectedIndex)
+                {
+                    case 0://single
+                        TrackManager.StopTrack(ref audioFileReader, ref waveOutDevice);
+                        UIHelper.ResetPoisonTrackBar(ptbSelectedAudioPosition);
+                        plbSelectedAudioPositionTime.Text = $"{TrackMetaData.FormatTrackTime(0)}/{TrackMetaData.FormatTrackTime(0)}";
+                        return;
+                    case 1://loop
+                        TrackManager.LoopTrack(ref audioFileReader, ref waveOutDevice);
+                        audioPositionTimer.Start();
+                        break;
+                    case 2://shuffle
+                        string previusTrackFilePath = audioFileReader.FileName;
+                        TrackManager.StopTrack(ref audioFileReader, ref waveOutDevice);
+                        //Chosing random trackn not equal to the previus one
+                        Random rand = new Random();
+                        int audioIndex;
+                        do
+                        {
+                            audioIndex = rand.Next(0, playlistCount);
+                        }
+                        while(previusTrackFilePath == playlist[audioIndex].FilePath);
+                        float startVolume = UIHelper.psbValueTowaveOutEventVolume(psbSelectedAudioVolume.Value);
+                        TrackManager.StartTrack(playlist[audioIndex], ref audioFileReader, ref waveOutDevice, startVolume);
+                        ptbSelectedAudioPosition.Maximum = (int)playlist[audioIndex].Duration.TotalSeconds;
+                        audioPositionTimer.Start();
+                        break;
+                }
             }
-            //canzone finita 
-            if(waveOutDevice.PlaybackState != PlaybackState.Stopped && audioFileReader != null)
+            //canzone in pausa
+            if(TrackStatus.IsTrackPaused(waveOutDevice) && audioFileReader != null)
             {
                 audioPositionTimer.Stop();
-                return;
             }
 
+            //aggiorno posizione canzone durante la riproduzione
             int seconds = (int)audioFileReader.CurrentTime.TotalSeconds;
             ptbSelectedAudioPosition.Value = seconds;
             plbSelectedAudioPositionTime.Text = $"{TrackMetaData.FormatTrackTime(seconds)}/{TrackMetaData.FormatTrackTime(ptbSelectedAudioPosition.Maximum)}";
-
+        
 
         }
     }

@@ -1,4 +1,6 @@
-﻿using Echo.Helpers;
+﻿using Echo.AudioTrackClasses;
+using Echo.Helpers;
+using NAudio.Wave;
 using ReaLTaiizor.Child.Crown;
 using ReaLTaiizor.Controls;
 using System;
@@ -158,22 +160,28 @@ namespace Echo
             trackbar.Value = 0;
         }
 
-        public static string ModalitaRiproduzioneText(ModalitaRiproduzione.e_ModalitaRiproduzione m)
+        public static void UpdateAudioPoisonTileState(WaveOutEvent waveOutDevice, AudioFileReader audioFileReader, PoisonTile poisonTile)
         {
-            switch (m)
+            if (TrackStatus.IsInitialized(waveOutDevice, audioFileReader))
             {
-                case ModalitaRiproduzione.e_ModalitaRiproduzione.Singolo:
-                    return "Modalità: Singolo";
-                case ModalitaRiproduzione.e_ModalitaRiproduzione.Loop:
-                    return "Modalità: Loop";
-                case ModalitaRiproduzione.e_ModalitaRiproduzione.Casuale:
-                    return "Modalità: Casuale";
+                switch (waveOutDevice.PlaybackState)
+                {
+                    case PlaybackState.Playing:
+                        poisonTile.TileImage = Properties.Resources.PauseAudio; // Sostituisci con l'icona appropriata per lo stato "Playing"
+                        break;
+                    case PlaybackState.Paused:
+                        poisonTile.TileImage = Properties.Resources.PlayAudio; // Sostituisci con l'icona appropriata per lo stato "Paused"
+                        break;
+                    case PlaybackState.Stopped:
+                        poisonTile.TileImage = Properties.Resources.PlayAudio; // Sostituisci con l'icona appropriata per lo stato "Stopped"
+                        break;
+                }
+                return;
             }
-            return "Errore";
+            poisonTile.TileImage = Properties.Resources.PlayAudio; // Sostituisci con l'icona appropriata per lo stato "Non inizializzato"
         }
 
+
     }
-    
-    
 }
 
