@@ -12,6 +12,10 @@ namespace Echo
     /// </summary>
     public static class AppDefaults
     {
+        public const string ConfigFileName = "settings.echconfig";
+        public static string ConfigDirectory = Path.Combine(".", "echoConfig");
+        public static string ConfigFilePath = Path.Combine(ConfigDirectory, ConfigFileName);
+
         public const Playback.PlaybackMode DefaultPlaybackMode = Playback.PlaybackMode.Loop;
         
 

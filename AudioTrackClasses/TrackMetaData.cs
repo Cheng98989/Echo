@@ -237,6 +237,10 @@ namespace Echo
                     // Copia traccia
                     System.IO.File.Copy(playlist[i].FilePath, destination, true);
 
+                    if(AppDefaults.DeleteOriginalAudioTrack)
+                        System.IO.File.Delete(playlist[i].FilePath);
+                    
+
                     // Salvo path traccia
                     if (tempDirectory)
                         echFile.WriteLine(Path.Combine(realAudioTrackDirectory, fileName));
