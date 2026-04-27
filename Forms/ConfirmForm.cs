@@ -17,7 +17,7 @@ namespace Echo
     {
         //Get e set sono i metodi di accesso di una proprieta'
         //get mette in sola lettura la proprieta Result e private set la rende modificale solo dall'interno della classe.
-        public ConfirmForm(string ConfirmMessage)
+        public ConfirmForm(string ConfirmMessage, AppSettings.UserSettings userSettings)
         {
             InitializeComponent();
             plbConfirmMessage.Text = ConfirmMessage;

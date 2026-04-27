@@ -13,6 +13,7 @@ using System.Web;
 using System.Windows.Forms;
 using TagLib;
 using TagLib.WavPack;
+using static Echo.AppSettings;
 
 namespace Echo
 {
@@ -34,12 +35,12 @@ namespace Echo
         }
 
         // Lettura traccia da file
-        public static AudioTrack FromFile(string filePath, float volume = AppDefaults.DefaultVolumeMultiplier)
+        public static AudioTrack FromFile(string filePath, float volume, AppSettings.UserSettings userSettings)
         {
             if (!System.IO.File.Exists(filePath))
                 throw new System.IO.FileNotFoundException();
 
-            float safeDefaultVolume = Math.Max(AppDefaults.MinDeviceVolume, Math.Min(AppDefaults.MaxDeviceVolume, volume));
+            float defaultVolumeMultiplier = (float)MathHelper.Clamp(volume, AppDefaults.MinDeviceVolume, AppDefaults.MaxDeviceVolume);
 
             AudioTrack newTrack;
             newTrack.FilePath = filePath;
@@ -56,12 +57,11 @@ namespace Echo
 
                     newTrack.Artist = !string.IsNullOrEmpty(fileTag.Tag.FirstPerformer)
                         ? fileTag.Tag.FirstPerformer.Trim()
-                        : AppDefaults.AudioTrackArtistNotAvailable;
+                        : userSettings.AudioTrackArtistNotAvailable;
 
                     newTrack.Album = !string.IsNullOrEmpty(fileTag.Tag.Album)
                         ? fileTag.Tag.Album.Trim()
-                        : AppDefaults.AudioTrackAlbumNotAvailable;
-
+                        : userSettings.AudioTrackAlbumNotAvailable;
                     // Copertina
                     if (fileTag.Tag.Pictures != null && fileTag.Tag.Pictures.Length >= 1)
                     {
@@ -79,7 +79,7 @@ namespace Echo
                     }
 
                     // Volume iniziale
-                    newTrack.VolumeMultiplier = safeDefaultVolume;
+                    newTrack.VolumeMultiplier = defaultVolumeMultiplier;
                 }
 
                 // Durata audio
@@ -96,7 +96,7 @@ namespace Echo
                 newTrack.Album = AppDefaults.AudioTrackError;
                 newTrack.Duration = TimeSpan.Zero;
                 newTrack.AlbumArt = null;
-                newTrack.VolumeMultiplier = safeDefaultVolume;
+                newTrack.VolumeMultiplier = defaultVolumeMultiplier;
             }
 
             return newTrack;
@@ -181,7 +181,7 @@ namespace Echo
         }
 
         // Salvataggio playlist in .ech
-        public static int SavePlaylistInEch(string softwareDirectory, string playlistName, AudioTrack[] playlist, int playlistCount, out int[] filePathError)
+        public static int SavePlaylistInEch(string softwareDirectory, string playlistName, AudioTrack[] playlist, int playlistCount, out int[] filePathError, AppSettings.UserSettings userSettings)
         {
             int errorsCount = 0;
             int[] errors = new int[playlistCount];
@@ -204,7 +204,7 @@ namespace Echo
 
             if (!System.IO.Directory.Exists(softwareDirectory))
                 Directory.CreateDirectory(softwareDirectory);
-            if (!StringHelper.CanBeADirectoryOrFileName(ref playlistName, AppDefaults.SubstituteToSpaceInDirectoryOrFileName))
+            if (!StringHelper.CanBeADirectoryOrFileName(ref playlistName, userSettings.SubstituteToSpaceInDirectoryOrFileName))
                 return -2;
 
             string playlistDirectory = Path.Combine(softwareDirectory, playlistName);
@@ -237,7 +237,7 @@ namespace Echo
                     // Copia traccia
                     System.IO.File.Copy(playlist[i].FilePath, destination, true);
 
-                    if(AppDefaults.DeleteOriginalAudioTrack)
+                    if(userSettings.DeleteOriginalAudioTrack)
                         System.IO.File.Delete(playlist[i].FilePath);
                     
 
@@ -281,7 +281,7 @@ namespace Echo
         }
 
         // Caricamento playlist da .ech
-        public static int LoadPlaylistFromEch(string echPath, ref string playlistName, ref AudioTrack[] playlist)
+        public static int LoadPlaylistFromEch(string echPath, ref string playlistName, ref AudioTrack[] playlist, AppSettings.UserSettings userSettings)
         {
             playlist = new AudioTrack[0];
             if (!IsPlaylist(echPath))
@@ -299,7 +299,7 @@ namespace Echo
                     string trackPath = reader.ReadLine();
                     string toParse = reader.ReadLine();
                     float volume = float.Parse(toParse, CultureInfo.InvariantCulture);
-                    tmp_playlist[i] = FromFile(trackPath, volume);
+                    tmp_playlist[i] = FromFile(trackPath, volume, userSettings);
                 }
 
                 playlist = tmp_playlist;

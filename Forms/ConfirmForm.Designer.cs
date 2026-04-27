@@ -84,12 +84,17 @@
             // 
             // pbtConferma
             // 
+            this.pbtConferma.FontSize = ReaLTaiizor.Extension.Poison.PoisonButtonSize.Tall;
             this.pbtConferma.Location = new System.Drawing.Point(29, 104);
+            this.pbtConferma.MaximumSize = new System.Drawing.Size(298, 23);
+            this.pbtConferma.MinimumSize = new System.Drawing.Size(298, 23);
             this.pbtConferma.Name = "pbtConferma";
             this.pbtConferma.Size = new System.Drawing.Size(298, 23);
+            this.pbtConferma.Style = ReaLTaiizor.Enum.Poison.ColorStyle.Lime;
             this.pbtConferma.TabIndex = 3;
-            this.pbtConferma.Text = "Confermo";
+            this.pbtConferma.Text = "CONFERMO";
             this.pbtConferma.UseSelectable = true;
+            this.pbtConferma.UseStyleColors = true;
             this.pbtConferma.Click += new System.EventHandler(this.pbtConferma_Click);
             // 
             // ConfirmForm

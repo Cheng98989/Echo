@@ -130,8 +130,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppDefaults.cs" />
-    <Compile Include="AppSettings.cs" />
+    <Compile Include="AppConfigs\AppDefaults.cs" />
+    <Compile Include="AppConfigs\AppSettings.cs" />
     <Compile Include="AudioTrackClasses\TrackStatus.cs" />
     <Compile Include="Forms\ModifyForm.cs">
       <SubType>Form</SubType>
@@ -139,7 +139,13 @@
     <Compile Include="Forms\ModifyForm.Designer.cs">
       <DependentUpon>ModifyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Playback.cs" />
+    <Compile Include="Forms\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AppConfigs\Playback.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="AudioTrackClasses\TrackManager.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
@@ -160,12 +166,15 @@
     <Compile Include="Forms\ConfirmForm.Designer.cs">
       <DependentUpon>ConfirmForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingService.cs" />
+    <Compile Include="AppConfigs\SettingService.cs" />
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ModifyForm.resx">
       <DependentUpon>ModifyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -190,7 +199,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="TODO_List.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

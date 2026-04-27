@@ -18,11 +18,14 @@ namespace Echo
 {
     public partial class ModifyForm : PoisonForm
     {
-        public ModifyForm(TrackMetaData.AudioTrack audio)
+        private AppSettings.UserSettings userSettings;
+
+        public ModifyForm(TrackMetaData.AudioTrack audio, AppSettings.UserSettings userSettings)
         {
             InitializeComponent();
 
             audioTrack = audio;
+            this.userSettings = userSettings;
             if(!File.Exists( audioTrack.FilePath))
             {
                 this.DialogResult = DialogResult.Cancel;
@@ -93,12 +96,12 @@ namespace Echo
                 a.Title = ptxTitolo.Text.Trim();
 
             if (string.IsNullOrEmpty(ptxAutore.Text.Trim()))
-                a.Artist = AppDefaults.AudioTrackArtistNotAvailable;
+                a.Artist = userSettings.AudioTrackArtistNotAvailable;
             else
                 a.Artist = ptxAutore.Text.Trim();
 
             if (string.IsNullOrEmpty(ptxAlbum.Text.Trim()))
-                a.Album = AppDefaults.AudioTrackAlbumNotAvailable;
+                a.Album = userSettings.AudioTrackAlbumNotAvailable;
             else
                 a.Album = ptxAlbum.Text.Trim();
 

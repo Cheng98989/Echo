@@ -12,19 +12,18 @@ namespace Echo
     {
         public struct UserSettings
         {
+            public string EchOnLoad;
+
             // ===== Percorsi =====
             public string BrowseAudioTracksInitialDirectory;
-            public string AudioTrackSavePath;
+            public string BrowsePlaylistsInitialDirectory;
 
             // ===== Comportamento =====
             public bool DeleteOriginalAudioTrack;
 
             // ===== Riproduzione =====
-            public Playback.PlaybackMode PlaybackMode;
+            public Playback.PlaybackMode DefaultPlaybackMode;
             public float DefaultVolumeMultiplier;
-
-            // ===== Limiti (potrebbero interessare) =====
-            public int MaxLoadedTracks;
 
             // ===== Naming file =====            
             public char SubstituteToSpaceInDirectoryOrFileName;
@@ -32,6 +31,9 @@ namespace Echo
             // ===== Fallback metadata =====
             public string AudioTrackArtistNotAvailable;
             public string AudioTrackAlbumNotAvailable;
+
+            // ===== Caratteri per messaggio di conferma =====
+            public int ConfirmationStringLength;
 
         }
     }
