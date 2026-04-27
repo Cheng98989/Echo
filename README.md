@@ -46,8 +46,6 @@ Sviluppato in **C# 7.3** su piattaforma **Windows Forms (.NET Framework 4.8)**.
 - **Audio**: [NAudio](https://github.com/naudio/NAudio.git) (decodifica e interfacciamento dispositivi audio).
 - **Metadati**: [taglib-sharp](https://github.com/mono/taglib-sharp.git) (lettura/scrittura tag ID3 in C#).
 
-
 ## Licenza
 
 Distribuito sotto licenza MIT. Vedi [LICENSE](LICENSE) per i dettagli.
-
