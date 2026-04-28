@@ -42,24 +42,5 @@ namespace Echo
             name = name.Replace(' ', spaceReplacement);
             return true;
         }
-
-        //public static string UniqueFilePath(string directory, string fileName)
-        //{
-        //    string destination = Path.Combine(directory, fileName);
-        //    if(!System.IO.File.Exists(destination))
-        //        return destination;
-
-        //    string baseName = Path.GetFileName(destination);
-        //    string extension = Path.GetExtension(destination);
-        //    int index = 1;
-        //    do
-        //    {
-        //        destination = Path.Combine(directory, $"{baseName} ({index}){extension}");
-        //        index++;
-        //    }
-        //    while (File.Exists(destination));
-
-        //    return destination;
-        //}
     }
 }

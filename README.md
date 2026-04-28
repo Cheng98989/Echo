@@ -14,7 +14,6 @@ Mi stavo stancando dell'utilizzo di Spotify: lo usavo solo per ascoltare le soli
 - **Formato `.ech`:** salvataggio delle playlist in cartelle dedicate contenenti i file audio copiati o spostati e un file di indice `.ech` per preservare l'ordine e il volume personalizzato.
 - **Impostazioni persistenti:** configurazione delle directory predefinite, comportamento sui file originali e caricamento automatico di una playlist all'avvio.
 - **Analisi playlist:** durata totale, numero di brani e durata media.
-
 ## Anteprima schermate
 
 | Schermata | Anteprima |
@@ -40,7 +39,7 @@ Mi stavo stancando dell'utilizzo di Spotify: lo usavo solo per ascoltare le soli
 Il progetto è organizzato nei seguenti moduli:
 
 - **`Forms/`**: interfacce grafiche utente, inclusi finestra principale, dialoghi, impostazioni e modifica brano.
-- **`AudioTrackClasses/`**: modello dati delle tracce, stato di riproduzione, lettura/scrittura dei metadati ID3 e gestione dei file `.ech`.
+- **`AudioTrackClasses/`**: modello dati delle tracce, stato di riproduzione, lettura/scrittura dei metadati e gestione dei file `.ech`.
 - **`Helpers/`**: classi di utilità per matematica, formattazione stringhe e UI.
 - **`Resources/`**: risorse grafiche e icone dell'applicazione.
 - **`AppConfigs/`**: file di configurazione dell'applicazione.

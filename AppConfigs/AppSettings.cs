@@ -15,25 +15,19 @@ namespace Echo
             public int VolumeOnLoad;
             public string EchOnLoad;
 
-            // ===== Percorsi =====
             public string BrowseAudioTracksInitialDirectory;
             public string BrowsePlaylistsInitialDirectory;
 
-            // ===== Comportamento =====
             public bool DeleteOriginalAudioTrack;
 
-            // ===== Riproduzione =====
             public Playback.PlaybackMode DefaultPlaybackMode;
             public float DefaultVolumeMultiplier;
-
-            // ===== Naming file =====            
+        
             public char SubstituteToSpaceInDirectoryOrFileName;
 
-            // ===== Fallback metadata =====
             public string AudioTrackArtistNotAvailable;
             public string AudioTrackAlbumNotAvailable;
 
-            // ===== Caratteri per messaggio di conferma =====
             public int ConfirmationStringLength;
 
         }
