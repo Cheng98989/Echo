@@ -36,7 +36,6 @@ namespace Echo
             this.plbSelectedAudioPositionTime = new ReaLTaiizor.Controls.PoisonLabel();
             this.poisonPanel1 = new ReaLTaiizor.Controls.PoisonPanel();
             this.plbSelectedAudioArtist = new ReaLTaiizor.Controls.PoisonLabel();
-            this.picSelectedAudioAlbumArt = new System.Windows.Forms.PictureBox();
             this.plbSelectedAudioTitle = new ReaLTaiizor.Controls.PoisonLabel();
             this.plbSelectedAudioPositionTrackTime = new ReaLTaiizor.Controls.PoisonLabel();
             this.ptlSelectedAudioVolumePct = new ReaLTaiizor.Controls.PoisonTile();
@@ -64,16 +63,18 @@ namespace Echo
             this.ptlSelectedAudioPlay = new ReaLTaiizor.Controls.PoisonTile();
             this.poisonLabel1 = new ReaLTaiizor.Controls.PoisonLabel();
             this.plbPlayingAudioName = new ReaLTaiizor.Controls.PoisonLabel();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.picPlayIcon = new System.Windows.Forms.PictureBox();
+            this.ordinaPlaylistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.picPauseIcon = new System.Windows.Forms.PictureBox();
+            this.picPlayIcon = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.picSelectedAudioAlbumArt = new System.Windows.Forms.PictureBox();
             this.poisonPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picSelectedAudioAlbumArt)).BeginInit();
             this.pcmDeleteAudio.SuspendLayout();
             this.menuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picPlayIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picPauseIcon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picPlayIcon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSelectedAudioAlbumArt)).BeginInit();
             this.SuspendLayout();
             // 
             // pcbPlaybackMode
@@ -134,17 +135,6 @@ namespace Echo
             this.plbSelectedAudioArtist.TabIndex = 17;
             this.plbSelectedAudioArtist.Text = "Autore";
             this.plbSelectedAudioArtist.UseCustomBackColor = true;
-            // 
-            // picSelectedAudioAlbumArt
-            // 
-            this.picSelectedAudioAlbumArt.Cursor = System.Windows.Forms.Cursors.Default;
-            this.picSelectedAudioAlbumArt.InitialImage = global::Echo.Properties.Resources.AlbumArtNotAvailable;
-            this.picSelectedAudioAlbumArt.Location = new System.Drawing.Point(16, 16);
-            this.picSelectedAudioAlbumArt.Name = "picSelectedAudioAlbumArt";
-            this.picSelectedAudioAlbumArt.Size = new System.Drawing.Size(280, 280);
-            this.picSelectedAudioAlbumArt.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picSelectedAudioAlbumArt.TabIndex = 2;
-            this.picSelectedAudioAlbumArt.TabStop = false;
             // 
             // plbSelectedAudioTitle
             // 
@@ -276,9 +266,10 @@ namespace Echo
             // 
             this.pcmDeleteAudio.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tspDeleteAudioAll,
+            this.ordinaPlaylistToolStripMenuItem,
             this.tspSelectedAudio});
             this.pcmDeleteAudio.Name = "pcmDeleteAudio";
-            this.pcmDeleteAudio.Size = new System.Drawing.Size(170, 48);
+            this.pcmDeleteAudio.Size = new System.Drawing.Size(170, 70);
             // 
             // tspDeleteAudioAll
             // 
@@ -363,7 +354,7 @@ namespace Echo
             // modificaToolStripMenuItem
             // 
             this.modificaToolStripMenuItem.Name = "modificaToolStripMenuItem";
-            this.modificaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.modificaToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.modificaToolStripMenuItem.Text = "Modifica";
             this.modificaToolStripMenuItem.Click += new System.EventHandler(this.modificaToolStripMenuItem_Click);
             // 
@@ -445,29 +436,11 @@ namespace Echo
             this.plbPlayingAudioName.Text = "Titolo";
             this.plbPlayingAudioName.UseCustomBackColor = true;
             // 
-            // pictureBox2
+            // ordinaPlaylistToolStripMenuItem
             // 
-            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pictureBox2.InitialImage = global::Echo.Properties.Resources.AlbumArtNotAvailable;
-            this.pictureBox2.Location = new System.Drawing.Point(416, 592);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(0, 0);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 18;
-            this.pictureBox2.TabStop = false;
-            // 
-            // picPlayIcon
-            // 
-            this.picPlayIcon.Cursor = System.Windows.Forms.Cursors.Default;
-            this.picPlayIcon.Enabled = false;
-            this.picPlayIcon.Image = global::Echo.Properties.Resources.PlayAudio;
-            this.picPlayIcon.InitialImage = global::Echo.Properties.Resources.PlayAudio;
-            this.picPlayIcon.Location = new System.Drawing.Point(520, 592);
-            this.picPlayIcon.Name = "picPlayIcon";
-            this.picPlayIcon.Size = new System.Drawing.Size(80, 80);
-            this.picPlayIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.picPlayIcon.TabIndex = 23;
-            this.picPlayIcon.TabStop = false;
+            this.ordinaPlaylistToolStripMenuItem.Name = "ordinaPlaylistToolStripMenuItem";
+            this.ordinaPlaylistToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.ordinaPlaylistToolStripMenuItem.Text = "Ordina Playlist";
             // 
             // picPauseIcon
             // 
@@ -482,6 +455,41 @@ namespace Echo
             this.picPauseIcon.TabIndex = 24;
             this.picPauseIcon.TabStop = false;
             this.picPauseIcon.Visible = false;
+            // 
+            // picPlayIcon
+            // 
+            this.picPlayIcon.Cursor = System.Windows.Forms.Cursors.Default;
+            this.picPlayIcon.Enabled = false;
+            this.picPlayIcon.Image = global::Echo.Properties.Resources.PlayAudio;
+            this.picPlayIcon.InitialImage = global::Echo.Properties.Resources.PlayAudio;
+            this.picPlayIcon.Location = new System.Drawing.Point(520, 592);
+            this.picPlayIcon.Name = "picPlayIcon";
+            this.picPlayIcon.Size = new System.Drawing.Size(80, 80);
+            this.picPlayIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.picPlayIcon.TabIndex = 23;
+            this.picPlayIcon.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Default;
+            this.pictureBox2.InitialImage = global::Echo.Properties.Resources.AlbumArtNotAvailable;
+            this.pictureBox2.Location = new System.Drawing.Point(416, 592);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(0, 0);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 18;
+            this.pictureBox2.TabStop = false;
+            // 
+            // picSelectedAudioAlbumArt
+            // 
+            this.picSelectedAudioAlbumArt.Cursor = System.Windows.Forms.Cursors.Default;
+            this.picSelectedAudioAlbumArt.InitialImage = global::Echo.Properties.Resources.AlbumArtNotAvailable;
+            this.picSelectedAudioAlbumArt.Location = new System.Drawing.Point(16, 16);
+            this.picSelectedAudioAlbumArt.Name = "picSelectedAudioAlbumArt";
+            this.picSelectedAudioAlbumArt.Size = new System.Drawing.Size(280, 280);
+            this.picSelectedAudioAlbumArt.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSelectedAudioAlbumArt.TabIndex = 2;
+            this.picSelectedAudioAlbumArt.TabStop = false;
             // 
             // MainForm
             // 
@@ -514,13 +522,13 @@ namespace Echo
             this.Text = "Echo";
             this.poisonPanel1.ResumeLayout(false);
             this.poisonPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picSelectedAudioAlbumArt)).EndInit();
             this.pcmDeleteAudio.ResumeLayout(false);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picPlayIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picPauseIcon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picPlayIcon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSelectedAudioAlbumArt)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -563,6 +571,7 @@ namespace Echo
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox picPlayIcon;
         private System.Windows.Forms.PictureBox picPauseIcon;
+        private System.Windows.Forms.ToolStripMenuItem ordinaPlaylistToolStripMenuItem;
     }
 }
 
